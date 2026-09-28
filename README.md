@@ -24,6 +24,8 @@ Die Tool-Datei selbst liegt bewusst **nicht** in diesem Repository.
 - **To-dos**: in die Zeile einer TN am gewünschten Tag klicken (oder „+ To-do“). Erscheinen als ⚑ im Gantt
   (blau offen, rot überfällig, grau erledigt) und in den Pendenzen mit Kästchen zum Abhaken. Gespeichert in der
   (verschlüsselten) Datei der TN; zählen auch bei beendeten TN (z. B. „Schlussbericht senden“).
+  Zusätzlich erscheinen sie in der **Übersicht** der TN in der Kurswoche ihres Datums (vor Kursbeginn → W1,
+  Verlängerung/nach Kursende → W4, jeweils mit Hinweis) und lassen sich dort abhaken, bearbeiten und neu erfassen.
 - Alle Dateien sollten dasselbe Passwort haben; abweichende lassen sich einzeln entsperren.
 
 ### Verschlüsselung
