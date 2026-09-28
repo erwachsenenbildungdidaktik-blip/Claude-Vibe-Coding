@@ -28,6 +28,11 @@ Die Tool-Datei selbst liegt bewusst **nicht** in diesem Repository.
   Verlängerung/nach Kursende → W4, jeweils mit Hinweis) und lassen sich dort abhaken, bearbeiten und neu erfassen.
 - Alle Dateien sollten dasselbe Passwort haben; abweichende lassen sich einzeln entsperren.
 
+### Notizen-Export (Markdown)
+„→ Notizen (.md)“ exportiert alle Notizen der offenen TN (Gesprächsnotizen, Traktanden-Notizen, Dossier, Zeugnisse,
+Vorstellungsgespräche) nach Erfassungszeitpunkt sortiert. Zeitpunkte werden seit v5.12 gespeichert; ältere Notizen
+sind nach Gesprächsdatum eingeordnet und mit „≈“ markiert. **Die .md-Datei ist unverschlüsselt.**
+
 ### Verschlüsselung
 - Klientendateien sind mit Passwort verschlüsselt (AES-256-GCM, Schlüssel via PBKDF2-SHA256, 600 000 Runden).
 - **Passwort vergessen = Daten weg.** Es gibt keine Hintertür.
