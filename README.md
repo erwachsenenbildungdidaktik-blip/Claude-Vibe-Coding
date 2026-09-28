@@ -14,7 +14,7 @@ Die Tool-Datei selbst liegt bewusst **nicht** in diesem Repository.
    Danach Tab schliessen und Stick auswerfen.
 
 ### Dashboard (Startseite)
-- Zeigt alle TN im Klientenordner: Gantt-Diagramm (7 Wochen, blätterbar, rote Heute-Linie), Stand pro TN, Kennzahlen.
+- Zeigt alle TN im Klientenordner: Gantt-Diagramm (Zeitfenster passt sich automatisch an: vom frühesten Start bis zum spätesten Ende aller laufenden TN, dazu geplante TN ab 4 Wochen vor Start und beendete bis 2 Wochen nach Ende; rote Heute-Linie), Stand pro TN, Kennzahlen.
 - **Pendenzen & Termine**: überfällig (rot), fällig in 3 Tagen (orange), Termine der nächsten 7 Tage.
   Pendenzen = nicht abgehakte Wochenaufgaben (fällig am Freitag der Kurswoche) und nicht erreichte RAV-/Kursziele mit Datum.
   Termine = Start-/Standort-/Abschlussgespräche und geplante Vorstellungsgespräche.
