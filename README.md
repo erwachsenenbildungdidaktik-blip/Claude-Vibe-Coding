@@ -21,6 +21,9 @@ Die Tool-Datei selbst liegt bewusst **nicht** in diesem Repository.
 - Aktualisiert sich jede Minute, solange der Tab offen ist. Erinnerungen gibt es nur bei offenem Tool.
 - Kursdauer pro TN im Klienten-Dialog: regulär 4 Wochen, verlängert 5 oder 6 Wochen, oder Abbruch mit Datum.
 - Beendete/abgebrochene TN: „Archivieren“ verschiebt die Datei nach `_archiv/`. Zurückholen: „Klienten“ → „Archiv …“.
+- **To-dos**: in die Zeile einer TN am gewünschten Tag klicken (oder „+ To-do“). Erscheinen als ⚑ im Gantt
+  (blau offen, rot überfällig, grau erledigt) und in den Pendenzen mit Kästchen zum Abhaken. Gespeichert in der
+  (verschlüsselten) Datei der TN; zählen auch bei beendeten TN (z. B. „Schlussbericht senden“).
 - Alle Dateien sollten dasselbe Passwort haben; abweichende lassen sich einzeln entsperren.
 
 ### Verschlüsselung
