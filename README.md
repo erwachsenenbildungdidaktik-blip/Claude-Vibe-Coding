@@ -13,6 +13,16 @@ Die Tool-Datei selbst liegt bewusst **nicht** in diesem Repository.
 5. **„Sitzung beenden“** am Schluss: speichert, leert das Fenster, vergisst Ordner und Passwort.
    Danach Tab schliessen und Stick auswerfen.
 
+### Dashboard (Startseite)
+- Zeigt alle TN im Klientenordner: Gantt-Diagramm (7 Wochen, blätterbar, rote Heute-Linie), Stand pro TN, Kennzahlen.
+- **Pendenzen & Termine**: überfällig (rot), fällig in 3 Tagen (orange), Termine der nächsten 7 Tage.
+  Pendenzen = nicht abgehakte Wochenaufgaben (fällig am Freitag der Kurswoche) und nicht erreichte RAV-/Kursziele mit Datum.
+  Termine = Start-/Standort-/Abschlussgespräche und geplante Vorstellungsgespräche.
+- Aktualisiert sich jede Minute, solange der Tab offen ist. Erinnerungen gibt es nur bei offenem Tool.
+- Kursdauer pro TN im Klienten-Dialog: regulär 4 Wochen, verlängert 5 oder 6 Wochen, oder Abbruch mit Datum.
+- Beendete/abgebrochene TN: „Archivieren“ verschiebt die Datei nach `_archiv/`. Zurückholen: „Klienten“ → „Archiv …“.
+- Alle Dateien sollten dasselbe Passwort haben; abweichende lassen sich einzeln entsperren.
+
 ### Verschlüsselung
 - Klientendateien sind mit Passwort verschlüsselt (AES-256-GCM, Schlüssel via PBKDF2-SHA256, 600 000 Runden).
 - **Passwort vergessen = Daten weg.** Es gibt keine Hintertür.
