@@ -13,6 +13,12 @@ Die Tool-Datei selbst liegt bewusst **nicht** in diesem Repository.
 5. **„Sitzung beenden“** am Schluss: speichert, leert das Fenster, vergisst Ordner und Passwort.
    Danach Tab schliessen und Stick auswerfen.
 
+> **Wichtig: Tool nie von einem Server-Laufwerk starten.** Liegt die Tool-Datei auf einem
+> Netzlaufwerk – oft unbemerkt, weil der **Desktop** bzw. „Dokumente“ auf den Server umgeleitet
+> ist (`\\server\…\Desktop`) –, bricht Edge das Ordnerfenster ohne Meldung ab (`AbortError`).
+> Das Tool vom Stick oder von einem lokalen Ordner (z. B. `C:\BIN`) öffnen.
+> Ab v5.17 zeigt das Diagnoseprotokoll an, woher das Tool gestartet wurde, und warnt in diesem Fall.
+
 ### Dashboard (Startseite)
 - Zeigt alle TN im Klientenordner: Gantt-Diagramm (Zeitfenster passt sich automatisch an: vom frühesten Start bis zum spätesten Ende aller laufenden TN, dazu geplante TN ab 4 Wochen vor Start und beendete bis 2 Wochen nach Ende; rote Heute-Linie), Stand pro TN, Kennzahlen.
 - **Pendenzen & Termine**: überfällig (rot), fällig in 3 Tagen (orange), Termine der nächsten 7 Tage.
