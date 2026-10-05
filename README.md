@@ -25,8 +25,14 @@ Die Tool-Datei selbst liegt bewusst **nicht** in diesem Repository.
   Pendenzen = nicht abgehakte Wochenaufgaben (fällig am Freitag der Kurswoche) und nicht erreichte RAV-/Kursziele mit Datum.
   Termine = Start-/Standort-/Abschlussgespräche und geplante Vorstellungsgespräche.
 - Aktualisiert sich jede Minute, solange der Tab offen ist. Erinnerungen gibt es nur bei offenem Tool.
+- **„+ TN erfassen“**: leerer Klient-Dialog; nach „Übernehmen“ geht es direkt ins Startgespräch.
 - Kursdauer pro TN im Klienten-Dialog: regulär 4 Wochen, verlängert 5 oder 6 Wochen, oder Abbruch mit Datum.
+  Bei einer Verlängerung wird pro Zusatzwoche gewählt, **welche Kurswoche wiederholt** wird (ab v5.18).
+  Dann erscheinen die Reiter **„W5 · Wdh. W2“** bzw. **„W6 · …“** mit Aufgaben, Traktanden und Outputs der
+  wiederholten Woche (eigener Häkchen-Stand), RAV-/Kursziele, Bewerbungen/Vorstellungsgespräche und Notizen.
+  Im Gantt ist die Zusatzwoche schraffiert und mit der wiederholten Woche beschriftet.
 - Beendete/abgebrochene TN: „Archivieren“ verschiebt die Datei samt ihren Sicherungskopien nach `_archiv/` (bzw. `_archiv/_sicherungen/`). Zurückholen: „Klienten“ → „Archiv …“.
+  Laufende TN lassen sich über „✕ entfernen“ beim Namen ebenso ins Archiv verschieben (z. B. bei Fehlerfassung).
 - **To-dos**: in die Zeile einer TN am gewünschten Tag klicken (oder „+ To-do“). Erscheinen als ⚑ im Gantt
   (blau offen, rot überfällig, grau erledigt) und in den Pendenzen mit Kästchen zum Abhaken. Gespeichert in der
   (verschlüsselten) Datei der TN; zählen auch bei beendeten TN (z. B. „Schlussbericht senden“).
