@@ -31,6 +31,12 @@ Die Tool-Datei selbst liegt bewusst **nicht** in diesem Repository.
   Dann erscheinen die Reiter **„W5 · Wdh. W2“** bzw. **„W6 · …“** mit Aufgaben, Traktanden und Outputs der
   wiederholten Woche (eigener Häkchen-Stand), RAV-/Kursziele, Bewerbungen/Vorstellungsgespräche und Notizen.
   Im Gantt ist die Zusatzwoche schraffiert und mit der wiederholten Woche beschriftet.
+  **„Verlängerung planen“** (ab v6.1, im Klient-Dialog und in den Reitern W5/W6): pro Zusatzwoche eine Kurswoche
+  wiederholen und/oder einzelne Lernsequenzen aus dem offiziellen Katalog (Übersicht 2026: A1–A6, B, C, E) anklicken.
+  Dazu Begründung ankreuzen (mit Vorschlägen aus den Kursdaten) und frei ergänzen. Das Tool erstellt daraus eine
+  **E-Mail an die Koordination** (Sequenzen nach Wochen) und eine **E-Mail an die RAV-Beratung** (Begründung,
+  Schwerpunkte, bisheriger Verlauf) — kopieren oder direkt im Mailprogramm öffnen. Die geplanten Sequenzen erscheinen
+  in W5/W6 zum Abhaken und im Schlussbericht.
 - Beendete/abgebrochene TN: „Archivieren“ verschiebt die Datei samt ihren Sicherungskopien nach `_archiv/` (bzw. `_archiv/_sicherungen/`). Zurückholen: „Klienten“ → „Archiv …“.
   Laufende TN lassen sich über „✕ entfernen“ beim Namen ebenso ins Archiv verschieben (z. B. bei Fehlerfassung).
 - **To-dos**: in die Zeile einer TN am gewünschten Tag klicken (oder „+ To-do“). Erscheinen als ⚑ im Gantt
