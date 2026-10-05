@@ -40,6 +40,23 @@ Die Tool-Datei selbst liegt bewusst **nicht** in diesem Repository.
   Verlängerung/nach Kursende → W4, jeweils mit Hinweis) und lassen sich dort abhaken, bearbeiten und neu erfassen.
 - Alle Dateien sollten dasselbe Passwort haben; abweichende lassen sich einzeln entsperren.
 
+### Schlussbericht & IKT-Zertifikat (ab v6.0 im Tool)
+Der frühere **Schlussbericht-Generator** ist als Reiter **„Schlussbericht“** eingebaut (auch über „→ Schlussbericht“
+oben oder „Bericht“ im Dashboard). Kein JSON-Export mehr, keine Klartext-Dateien.
+- **Vorbelegt aus dem Kurs-Tool:** Anrede, Name, Pensum, Status (Zwischenverdienst), Zielerreichung (RAV- und Kursziele),
+  Dossier-Stand (W2-Outputs), Arbeitszeugnisse/Intervention, LinkedIn, Simulation A6.V, Führerausweis/Fahrzeug, IKT-Niveau,
+  Job-Room. „Aus Kursdaten neu vorbelegen“ setzt die Eingaben zurück (die CSV bleibt).
+- **Automatische Sätze** (je abschaltbar): Zielbilanz („Sie hat drei der vier vereinbarten RAV-Ziele erreicht …“),
+  Kursverlauf (Verlängerung mit wiederholter Woche, Abbruch), Wirkung (Bewerbungen und Einladungen im Kurs vs. vorher).
+  Die Schlussfolgerung beginnt passend zu Status, Zielerreichung und Dossier-Stand — nie mehr im Widerspruch zum Rest.
+- **Gesprächsnotizen** aller Gespräche (inkl. W5/W6 und Traktanden-Notizen) stehen als Nachschlagewerk im Bericht.
+- **Speichern:** Jede Eingabe landet verschlüsselt in der Klientendatei (`bericht`), ebenso die Kursteilnahmen-CSV.
+- **Bausteine-Bibliothek:** liegt im Klientenordner unter `_bausteine/bibliothek.json` und wird automatisch geladen und
+  gespeichert (enthält keine TN-Daten, solange keine Namen in Bausteine geschrieben werden).
+- **IKT-Zertifikat:** zählt die besuchten Lektionen (jede Lektion = 1, unabhängig von der Dauer) und formuliert den
+  Fliesstext aus den besuchten E-Sequenzen. Word-Zertifikat aus der SO-Datei wie bisher.
+- Der Generator läuft weiterhin auch allein (`Schlussbericht-Generator_v7-0.html`).
+
 ### Notizen-Export (Markdown)
 „→ Notizen (.md)“ exportiert alle Notizen der offenen TN (Gesprächsnotizen, Traktanden-Notizen, Dossier, Zeugnisse,
 Vorstellungsgespräche) nach Erfassungszeitpunkt sortiert. Zeitpunkte werden seit v5.12 gespeichert; ältere Notizen
