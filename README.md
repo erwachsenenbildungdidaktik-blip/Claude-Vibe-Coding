@@ -36,7 +36,7 @@ Die Tool-Datei selbst liegt bewusst **nicht** in diesem Repository.
   Begründung ist immer „Kursziele nicht erreicht“: Das Tool listet die offenen Kursziele auf, Ergänzung als Freitext.
   Daraus entstehen eine **E-Mail an die Koordination** (Sequenzen nach Wochen) und eine **E-Mail an die RAV-Beratung**
   (Begründung, Schwerpunkte, bisheriger Verlauf) — kopieren oder per `mailto:` im Standard-Mailprogramm (Outlook)
-  öffnen. Die geplanten Sequenzen erscheinen in W5/W6 zum Abhaken und im Schlussbericht.
+  öffnen. Ab v6.3 sind die Links im Windows-Zeichensatz kodiert, damit Umlaute im klassischen Outlook stimmen. Die geplanten Sequenzen erscheinen in W5/W6 zum Abhaken und im Schlussbericht.
 - **Kursabbruch** (ab v6.2, Klient-Dialog → „Abbruch: Grund, Verwarnungen & E-Mail …“): Datum, Grund (Abwesenheit von
   10 Tagen · 4 unentschuldigte Abwesenheitstage · nach mündlicher und schriftlicher Verwarnung), Daten der Verwarnungen.
   Daraus entsteht eine **E-Mail an die Koordination**, die das Offizielle übernimmt; der Schlussbericht nennt den Grund.
