@@ -62,6 +62,10 @@ oben oder „Bericht“ im Dashboard). Kein JSON-Export mehr, keine Klartext-Dat
 - **Speichern:** Jede Eingabe landet verschlüsselt in der Klientendatei (`bericht`), ebenso die Kursteilnahmen-CSV.
 - **Bausteine-Bibliothek:** liegt im Klientenordner unter `_bausteine/bibliothek.json` und wird automatisch geladen und
   gespeichert (enthält keine TN-Daten, solange keine Namen in Bausteine geschrieben werden).
+- **Absenzen aus der CSV** (ab v6.4): Als Absenz zählen nur die Codes A–I (X = anwesend); leere oder unbekannte
+  Codes werden nicht gewertet und als Warnung mit Datum angezeigt. Nur Code G trägt die Begründung aus der Grund-Zeile,
+  alle anderen die Code-Bezeichnung (G ohne Begründung → Warnung). Umfang in Vierteltagen (¼ · ½ · ¾ · 1 Tag):
+  pro Tageshälfte (Grenze 12:00) der Anteil der abwesenden an der geplanten Lektionszeit laut CSV.
 - **IKT-Zertifikat:** zählt die besuchten Lektionen (jede Lektion = 1, unabhängig von der Dauer) und formuliert den
   Fliesstext aus den besuchten E-Sequenzen. Word-Zertifikat aus der SO-Datei wie bisher.
 - Der Generator läuft weiterhin auch allein (`Schlussbericht-Generator_v7-0.html`).
