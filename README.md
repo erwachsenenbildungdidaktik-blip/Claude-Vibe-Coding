@@ -47,6 +47,11 @@ Die Tool-Datei selbst liegt bewusst **nicht** in diesem Repository.
   (verschlüsselten) Datei der TN; zählen auch bei beendeten TN (z. B. „Schlussbericht senden“).
   Zusätzlich erscheinen sie in der **Übersicht** der TN in der Kurswoche ihres Datums (vor Kursbeginn → W1,
   Verlängerung/nach Kursende → W4, jeweils mit Hinweis) und lassen sich dort abhaken, bearbeiten und neu erfassen.
+- **Erinnerungen** (ab v6.5): To-dos haben optional eine Uhrzeit. Solange das Tool offen ist, erscheinen fällige
+  To-dos unten rechts (mit Ton, auf Wunsch als Windows-Benachrichtigung) mit „Erledigt“ und „+1 Std.“; ohne Uhrzeit
+  ab 08:00 am Fälligkeitstag. **„Speichern + Outlook“** lädt eine `.ics`-Datei mit Erinnerung (15 Min. vorher bzw.
+  08:00) — Doppelklick übernimmt sie in Outlook, das dann auch bei geschlossenem Tool erinnert. Erneutes Übernehmen
+  aktualisiert denselben Termin; erledigt wird im Tool abgehakt.
 - Alle Dateien sollten dasselbe Passwort haben; abweichende lassen sich einzeln entsperren.
 
 ### Schlussbericht & IKT-Zertifikat (ab v6.0 im Tool)
