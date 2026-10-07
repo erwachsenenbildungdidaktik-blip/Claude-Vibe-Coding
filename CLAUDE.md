@@ -44,26 +44,43 @@ in Bewerbungskursen und Einzelcoachings.
 
 Aufbau Sie – Ich – Wir. Belegt statt behauptet, zurückhaltend im Ton.
 
-### Sie-Teil: den Firmenslogan in eine kreative Einleitung einbinden
+### Sie-Teil: eine kreative Einleitung aus der eigenen Firmenrecherche
 
-- Bei der Firmenrecherche gezielt Slogan, Werbesprüche, Leitbild und Werte sammeln. Sie liefern
-  den Stoff für die Einleitung.
-- Wer den Slogan kreativ in die Einleitung einbindet, hat meist die Aufmerksamkeit. Hier soll
-  Claude seine Stärke ausspielen: mehrere Varianten anbieten, die Person wählt.
+Darum ist die Firmenrecherche so wichtig: Jeder Mensch achtet auf andere Dinge. Was der Person
+auffällt, macht die Bewerbung einzigartig, auch wenn eine KI beim Formulieren hilft.
+
+- **Aufhänger gibt es viele, nicht nur den Slogan:**
+  - Slogan und Werbesprache
+  - Zahlen: Gründungsjahr, Mitarbeitende, Filialen, Tagesmengen, Kundschaft (für zahlenaffine Personen)
+  - Geschichte und Tradition
+  - Werte und Leitbild, und woran man sie im Alltag sieht
+  - Produkte und Dienstleistungen, aus Sicht der Kundschaft
+  - Aktuelles: Neubau, neue Filiale, Auszeichnung, Übernahme, Medienbericht
+  - Menschen: Lehrlingsausbildung, Teamkultur, Auftritt in den sozialen Medien
+  - Eigener Berührungspunkt: selbst Kundin oder Kunde gewesen, beobachtet, erlebt
+- **Die Auswahl trifft die Person.** Frage an sie: «Was ist Ihnen bei der Recherche aufgefallen?»
+  Claude formuliert aus dieser Beobachtung mehrere Varianten, die Person wählt.
+- **Keine erfundenen Fakten.** Claude arbeitet nur mit dem, was die Person recherchiert hat.
+  Zahlen und Fakten brauchen eine Quelle; eine falsche Zahl in der Einleitung schadet mehr als
+  keine.
 - Viele Firmen bevorzugen Personen, die sich mit ihren Werten identifizieren, auch mit Lücken im
   Profil, gegenüber Wunschkandidaten mit eigener Agenda.
-- Den Slogan **nicht zitieren und kommentieren**, sondern in den eigenen Satz verweben, sodass er
-  zur Brücke zur eigenen Erfahrung wird. Techniken:
+- Den Aufhänger **nicht zitieren und kommentieren**, sondern in den eigenen Satz verweben, sodass
+  er zur Brücke zur eigenen Erfahrung wird. Techniken:
   - **Weiterführen:** den Slogan aufnehmen und dort weiterdenken, wo die eigene Arbeit liegt.
   - **Hinter die Kulissen:** zeigen, was es braucht, damit der Slogan für die Kundschaft stimmt.
   - **Wortspiel oder Bild:** ein Begriff aus dem Slogan wird auf die eigene Rolle übertragen.
-- Beispiele (erfundene Slogans):
+- Beispiele (erfundene Firmenangaben):
   - Schwach: «Ihr Slogan ‹Frische, die man schmeckt› spricht mich sehr an.»
   - Stark: «Frische, die man schmeckt, beginnt lange vor der Theke: beim Warenfluss, bei der
     Lagerung und beim richtigen Wort zur Kundin. Genau dort habe ich die letzten vier Jahre
     gearbeitet.»
   - Stark: «Bewegung in die Region bringen Sie mit Ihren Linien jeden Tag. Damit diese Bewegung im
     Lager nicht ins Stocken gerät, habe ich während fünf Jahren …»
+  - Zahl: «40 000 Pakete verlassen Ihr Verteilzentrum jeden Tag. Damit jedes davon stimmt, braucht
+    es Hände, die genau arbeiten: In den letzten fünf Jahren habe ich …»
+  - Aktuelles: «Mit der neuen Filiale in Lyss kommen Sie Ihrer Kundschaft im Seeland ein gutes
+    Stück näher. Diese Kundschaft kenne ich: …»
 - Leitplanken: Die Einleitung muss von einem echten Beleg gedeckt sein. Der Ton richtet sich nach
   der Firma: bei konservativen Betrieben und öffentlichen Arbeitgebenden dezent statt verspielt.
   Prüffrage aus dem Arbeitsblatt: «Passt das zu dieser Firma?»
