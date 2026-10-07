@@ -27,6 +27,9 @@ in Bewerbungskursen und Einzelcoachings.
 - **Schadensminderungspflicht beachten.** Keine Fragen oder Funktionen, die zumutbare Arbeit
   ausschliessen helfen (Interesse, Wunschlohn, «Passt zu mir?»). Gesundheitliche Einschränkungen
   klärt das RAV, nicht das Werkzeug.
+- **Qualitätsmerkmale sind Hinweise, keine Sperren.** Jede tatsächliche Arbeitsbemühung muss eintragbar
+  sein (Initiativbewerbungen zählen als Arbeitsbemühungen). «Bewerbungsreif» (Signal und
+  Ansprechperson) markiert Qualität und liefert Gesprächsstoff, verhindert aber nichts.
 - **Einstufungen sind Gesprächsgrundlage, keine Entscheidung.** Schwellenwerte sind gesetzt, nicht
   geeicht; das gehört transparent in den Disclaimer.
 
