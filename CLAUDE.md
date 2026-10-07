@@ -73,40 +73,39 @@ auffällt, macht die Bewerbung einzigartig, auch wenn eine KI beim Formulieren h
   - **Weiterführen:** den Slogan aufnehmen und dort weiterdenken, wo die eigene Arbeit liegt.
   - **Hinter die Kulissen:** zeigen, was es braucht, damit der Slogan für die Kundschaft stimmt.
   - **Wortspiel oder Bild:** ein Begriff aus dem Slogan wird auf die eigene Rolle übertragen.
-- Beispiele (erfundene Firmenangaben):
+- Beispiele (erfundene Firmenangaben, ohne Doppelpunkte und Gedankenstriche):
   - Schwach: «Ihr Slogan ‹Frische, die man schmeckt› spricht mich sehr an.»
-  - Stark: «Frische, die man schmeckt, beginnt lange vor der Theke: beim Warenfluss, bei der
-    Lagerung und beim richtigen Wort zur Kundin. Genau dort habe ich die letzten vier Jahre
+  - Stark: «Frische, die man schmeckt, beginnt lange vor der Theke. Sie beginnt beim Warenfluss,
+    bei der Lagerung und beim richtigen Wort zur Kundin. Genau dort habe ich die letzten vier Jahre
     gearbeitet.»
-  - Stark: «Bewegung in die Region bringen Sie mit Ihren Linien jeden Tag. Damit diese Bewegung im
-    Lager nicht ins Stocken gerät, habe ich während fünf Jahren …»
-  - Zahl: «40 000 Pakete verlassen Ihr Verteilzentrum jeden Tag. Damit jedes davon stimmt, braucht
-    es Hände, die genau arbeiten: In den letzten fünf Jahren habe ich …»
+  - Zahl: «Aus Ihrem Verteilzentrum in Biel gehen jeden Tag rund 40 000 Pakete hinaus. Ich fahre
+    seit Jahren daran vorbei und habe mich oft gefragt, wie das hinter den Toren funktioniert.»
   - Aktuelles: «Mit der neuen Filiale in Lyss kommen Sie Ihrer Kundschaft im Seeland ein gutes
-    Stück näher. Diese Kundschaft kenne ich: …»
+    Stück näher. Diese Kundschaft kenne ich aus vier Jahren im Verkauf in Lyss.»
 - Leitplanken: Die Einleitung muss von einem echten Beleg gedeckt sein. Der Ton richtet sich nach
   der Firma: bei konservativen Betrieben und öffentlichen Arbeitgebenden dezent statt verspielt.
   Prüffrage aus dem Arbeitsblatt: «Passt das zu dieser Firma?»
 
-### Wir-Teil: Win-win auf Schweizer Art
+### Ich, Wir und Schluss: verbindlich ist der Leitfaden
 
-Kein Auftrumpfen, keine selbstbezogenen Gewissheiten. Der Wir-Teil folgt drei Schritten:
+Für den Brieftext gilt **`docs/Leitfaden_Initiativbewerbung.md`** samt den Umsetzungsentscheiden
+am Ende. Kurzfassung:
 
-1. **Einschätzen:** Die Anforderungen und Aufgaben kann ich einschätzen (zeigt, dass die Stelle
-   verstanden ist).
-2. **Einbringen:** Meine Erfahrung und Kompetenzen bringe ich ein (mit Beleg).
-3. **Stärken:** Diese kann ich bei Ihnen weiter stärken und vertiefen.
-
-Daraus ergibt sich die Win-win-Situation, zurückhaltend formuliert, etwa als Möglichkeit oder
-Gelegenheit, die sich mit dieser Stelle bietet.
-
-- Beispiel: «Die Aufgaben in Ihrem Kundendienst kann ich gut einschätzen: Reklamationen am Telefon
-  gehörten in den letzten drei Jahren zu meinem Alltag. Diese Erfahrung bringe ich gerne bei Ihnen
-  ein, und mit Ihrer zweisprachigen Kundschaft könnte ich meine Französischkenntnisse weiter
-  festigen. Daraus ergäbe sich eine gute Grundlage für beide Seiten.»
-- **Vermeiden:** «Ich bin überzeugt, dass …», «Ich bin sicher, dass ich …», «Ich passe perfekt …»,
-  «meine Leidenschaft», «Ich bringe einen grossen Mehrwert».
-- Eigene Agenda heisst: Weiterentwicklung **ohne Bezug zu den Aufgaben** («Ich möchte mich
-  beruflich neu orientieren»). Weiterentwicklung **an den Aufgaben** ist Teil des Win-win.
-- Einstieg anbieten statt Stelle fordern (Probeeinsatz, befristeter Einsatz, Saison), immer zu
-  orts- und branchenüblichem Lohn.
+- **Vier Absätze:** Sie (Einleitung der Person, keine vorgefertigten Sätze), Ich (Stellungnahme zu
+  Aufgaben und Anforderungen), Wir (Ziele, Motivation, Angebote), Schluss (Gespräch, Anruf oder
+  Rückmeldung).
+- **Ich:** Schlagwörter wörtlich aus Inserat, früherem Inserat, Karriereseite oder vergleichbarer
+  Firma. Jedes Schlagwort in einem ganzen Satz mit Beleg; ohne Beleg wird es weggelassen.
+- **Wir:** Ziele und Motivation als ergänzte Satzanfänge, Angebote als fertige Sätze im höflichen
+  Konjunktiv. Weiterentwicklung an den Aufgaben gehört dazu («… und mich im Lager
+  weiterentwickeln»); eigene Agenda ist Weiterentwicklung ohne Bezug zu den Aufgaben.
+- **Keine fest einprogrammierten Wertungssätze**, auch nicht «Die Aufgaben kann ich gut
+  einschätzen».
+- **Nicht verwenden:** perfekt, ideal, optimal, der/die Richtige, bestens geeignet, überzeugt,
+  hundertprozentig, zweifellos; «Ich melde mich», «Ich erwarte», «Ich will»; «Hiermit bewerbe ich
+  mich», «mit grossem Interesse», «neue Herausforderung»; Doppelpunkte und Gedankenstriche im
+  Fliesstext.
+- **Schweizer Schreibweise:** Anrede ohne Komma, «Freundliche Grüsse» ohne Komma, Datum
+  ausgeschrieben («19. Oktober 2026»), Tausender mit Leerzeichen («40 000»).
+- Einstieg anbieten statt Stelle fordern (Probearbeit, Zwischenverdienst, befristeter Einsatz),
+  immer zu orts- und branchenüblichem Lohn.
