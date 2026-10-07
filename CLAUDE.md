@@ -44,31 +44,49 @@ in Bewerbungskursen und Einzelcoachings.
 
 Aufbau Sie – Ich – Wir. Belegt statt behauptet, zurückhaltend im Ton.
 
-### Sie-Teil: die Sprache der Firma aufgreifen
+### Sie-Teil: den Firmenslogan in eine kreative Einleitung einbinden
 
 - Bei der Firmenrecherche gezielt Slogan, Werbesprüche, Leitbild und Werte sammeln. Sie liefern
-  die Formulierungen für den Sie-Teil.
-- Wer die Bewerbung mit dem Slogan verbindet, hat meist die Aufmerksamkeit.
+  den Stoff für die Einleitung.
+- Wer den Slogan kreativ in die Einleitung einbindet, hat meist die Aufmerksamkeit. Hier soll
+  Claude seine Stärke ausspielen: mehrere Varianten anbieten, die Person wählt.
 - Viele Firmen bevorzugen Personen, die sich mit ihren Werten identifizieren, auch mit Lücken im
   Profil, gegenüber Wunschkandidaten mit eigener Agenda.
-- Den Slogan **nie nur zitieren**. Immer mit einem eigenen Beleg verbinden, der ihn einlöst.
+- Den Slogan **nicht zitieren und kommentieren**, sondern in den eigenen Satz verweben, sodass er
+  zur Brücke zur eigenen Erfahrung wird. Techniken:
+  - **Weiterführen:** den Slogan aufnehmen und dort weiterdenken, wo die eigene Arbeit liegt.
+  - **Hinter die Kulissen:** zeigen, was es braucht, damit der Slogan für die Kundschaft stimmt.
+  - **Wortspiel oder Bild:** ein Begriff aus dem Slogan wird auf die eigene Rolle übertragen.
+- Beispiele (erfundene Slogans):
   - Schwach: «Ihr Slogan ‹Frische, die man schmeckt› spricht mich sehr an.»
-  - Stark: «‹Frische, die man schmeckt›: Genau darauf habe ich in vier Jahren an der Frischetheke
-    geachtet, vom Warenfluss bis zur Beratung.»
+  - Stark: «Frische, die man schmeckt, beginnt lange vor der Theke: beim Warenfluss, bei der
+    Lagerung und beim richtigen Wort zur Kundin. Genau dort habe ich die letzten vier Jahre
+    gearbeitet.»
+  - Stark: «Bewegung in die Region bringen Sie mit Ihren Linien jeden Tag. Damit diese Bewegung im
+    Lager nicht ins Stocken gerät, habe ich während fünf Jahren …»
+- Leitplanken: Die Einleitung muss von einem echten Beleg gedeckt sein. Der Ton richtet sich nach
+  der Firma: bei konservativen Betrieben und öffentlichen Arbeitgebenden dezent statt verspielt.
+  Prüffrage aus dem Arbeitsblatt: «Passt das zu dieser Firma?»
 
-### Wir-Teil: keine eigene Agenda
+### Wir-Teil: Win-win auf Schweizer Art
 
-Hier zeigt sich, ob jemand die eigene Agenda verfolgt. Häufiger KI-Fehler: selbstbezogene
-Gewissheiten.
+Kein Auftrumpfen, keine selbstbezogenen Gewissheiten. Der Wir-Teil folgt drei Schritten:
 
+1. **Einschätzen:** Die Anforderungen und Aufgaben kann ich einschätzen (zeigt, dass die Stelle
+   verstanden ist).
+2. **Einbringen:** Meine Erfahrung und Kompetenzen bringe ich ein (mit Beleg).
+3. **Stärken:** Diese kann ich bei Ihnen weiter stärken und vertiefen.
+
+Daraus ergibt sich die Win-win-Situation, zurückhaltend formuliert, etwa als Möglichkeit oder
+Gelegenheit, die sich mit dieser Stelle bietet.
+
+- Beispiel: «Die Aufgaben in Ihrem Kundendienst kann ich gut einschätzen: Reklamationen am Telefon
+  gehörten in den letzten drei Jahren zu meinem Alltag. Diese Erfahrung bringe ich gerne bei Ihnen
+  ein, und mit Ihrer zweisprachigen Kundschaft könnte ich meine Französischkenntnisse weiter
+  festigen. Daraus ergäbe sich eine gute Grundlage für beide Seiten.»
 - **Vermeiden:** «Ich bin überzeugt, dass …», «Ich bin sicher, dass ich …», «Ich passe perfekt …»,
-  «meine Leidenschaft», «Diese Stelle bietet mir die Chance, mich weiterzuentwickeln».
-- **Stattdessen** aus der Sicht der gemeinsamen Gelegenheit argumentieren: was sich mit dieser
-  Stelle für den Betrieb und für die Zusammenarbeit ergibt.
-  - «Mit Ihrem neuen Standort in Biel ergibt sich die Möglichkeit, die Kundschaft auch auf
-    Französisch zu beraten.»
-  - «Daraus ergäbe sich für uns die Chance, …» / «Gerne würde ich dazu beitragen, dass …»
-- Prüffrage: Ist die Chance **für den Betrieb** konkret? Eine Chance nur für die bewerbende Person
-  ist wieder die eigene Agenda.
+  «meine Leidenschaft», «Ich bringe einen grossen Mehrwert».
+- Eigene Agenda heisst: Weiterentwicklung **ohne Bezug zu den Aufgaben** («Ich möchte mich
+  beruflich neu orientieren»). Weiterentwicklung **an den Aufgaben** ist Teil des Win-win.
 - Einstieg anbieten statt Stelle fordern (Probeeinsatz, befristeter Einsatz, Saison), immer zu
   orts- und branchenüblichem Lohn.
