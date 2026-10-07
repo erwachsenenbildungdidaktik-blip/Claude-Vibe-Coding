@@ -188,4 +188,5 @@ Wo sich der Leitfaden selbst widerspricht, gilt Folgendes:
 2. **Kein Doppelpunkt im Satzrahmen.** «Ein Beispiel: …» widerspricht Abschnitt 5. Das Beispiel wird als eigener ganzer Satz in einem Zusatzfeld erfasst.
 3. **Verb-Prüfung nur ungefähr.** Ohne Sprachmodell markiert der Selbstcheck Sätze, die wie Stichworte aussehen (weniger als drei Wörter), und zwei Verhältniswörter hintereinander («kenne ich aus in meiner Lehre»).
 4. **Grammatik im Satzrahmen.** Das Feld «Im Satz als» erlaubt Artikel und Fall («Den Wareneingang»); das Schlagwort selbst bleibt wörtlich in der Liste.
-5. **KI-Auftrag bleibt** als freiwillige Formulierungshilfe für die Einleitung. Er schreibt nichts in den Brief und enthält dieselben Stilregeln.
+5. **KI-Aufträge für Sie, Ich und Wir** als freiwillige Formulierungshilfe, je mit Vorschau und Kopierknopf. Sie schreiben nichts in den Brief, enthalten dieselben Stilregeln und keine Namen von Personen. Jeder Auftrag beginnt mit: «Berücksichtige alle dir bekannten beruflichen Informationen über mich. Wenn dir für einen Satz eine Angabe fehlt, frag nach, statt etwas zu erfinden.» Der zweite Satz verhindert, dass eine KI ohne Wissen über die Person Erfahrungen erfindet.
+6. **Kein Drei-Fragen-Test.** Er wurde aus dem Werkzeug entfernt, ebenso die Quellenangaben, die nur dafür nötig waren.
