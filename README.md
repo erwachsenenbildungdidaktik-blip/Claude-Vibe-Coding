@@ -65,6 +65,8 @@ oben oder „Bericht“ im Dashboard). Kein JSON-Export mehr, keine Klartext-Dat
 - **IKT-Zertifikat:** zählt die besuchten Lektionen (jede Lektion = 1, unabhängig von der Dauer) und formuliert den
   Fliesstext aus den besuchten E-Sequenzen. Word-Zertifikat aus der SO-Datei wie bisher; die **Anzahl Lektionen** in der
   Kopftabelle wird ab v6.6 durch die Zählung aus der CSV ersetzt (SocialOffice schreibt dort eine eigene Zahl).
+  **Name und Vorname** setzt das Tool ebenfalls ein: aus der CSV, sonst aus dem Klientennamen im Kurs-Tool
+  (Format „Vorname Nachname“ oder „Nachname, Vorname“; Partikel wie „von“ gehören zum Nachnamen).
   Zeilen „Bemerkungen“ im CSV-Export sind keine Lektionen; sie erscheinen bei den Absenzen nur als Info.
   Der LinkedIn-Satz (E3.II) nennt ein Profil nur, wenn im Bericht unter Handlungsfeld A › Netzwerk „LinkedIn-Profil
   erstellt“ bzw. „… & aktiv“ gewählt ist — der Kursbesuch allein heisst nicht, dass ein Konto besteht.
