@@ -57,7 +57,8 @@ Kein direkter Dateizugriff: „Klienten“ → „Datei laden …“ (Upload) un
 |---|---|---|
 | `ios-webapp/` | **iOS** (Web-App) · wird auch in die Android-App eingepackt | Die App selbst (HTML), eine Codebasis für beide |
 | `android-app/` | **Android** | Android-Projekt (Hülle um `ios-webapp/`) |
-| `android-apk/Bewerbung-PDF-Android.apk` | **Android** | Installierbare, signierte APK |
+| `downloads/Bewerbung-PDF-Android.apk` | **Android** | **Download 1:** installierbare, signierte APK |
+| `downloads/Bewerbung-PDF-iPhone-Webapp.zip` | **iOS** | **Download 2:** Web-App zum Hochladen (z. B. Netlify), dann auf dem iPhone „Zum Home-Bildschirm“ |
 | `.github/workflows/android-apk.yml` | **Android** | Baut die APK (unsigniert, Branch `android-apk-build`) |
 | `.github/workflows/ios-webapp-pages.yml` | **iOS** | Veröffentlicht die Web-App auf GitHub Pages |
 | `netlify.toml` | **iOS** | Veröffentlicht die Web-App auf Netlify |
@@ -92,7 +93,7 @@ Veröffentlicht wird nur dieser Ordner, nicht der Rest des Repos.
 **Variante A: Netlify** (am einfachsten)
 1. Auf netlify.com ein kostenloses Konto anlegen.
 2. „Add new site“ → „Deploy manually“ wählen.
-3. Den Ordner `ios-webapp` ins Browserfenster ziehen.
+3. `downloads/Bewerbung-PDF-iPhone-Webapp.zip` (oder den Ordner `ios-webapp`) ins Browserfenster ziehen.
 4. Die angezeigte Adresse (…netlify.app) auf dem iPhone in **Safari** öffnen.
 5. Teilen (□↑) → „Zum Home-Bildschirm“ → „Hinzufügen“.
    (Alternativ Repo verbinden: `netlify.toml` setzt Ordner und Sicherheits-Header automatisch.)
@@ -106,6 +107,8 @@ Veröffentlicht wird nur dieser Ordner, nicht der Rest des Repos.
    Achtung: Pages für **private** Repos geht nur mit einem kostenpflichtigen GitHub-Plan.
 
 **Updates:** Bei jeder Änderung `CACHE` in `sw.js` hochzählen (aktuell `v2`), sonst behalten iPhones die alte Fassung.
+Das ZIP in `downloads/` wird nicht automatisch gebaut: nach Änderungen an `ios-webapp/` neu erzeugen
+(Inhalt: alle Dateien aus `ios-webapp/` plus `_headers` und `LIESMICH-iPhone.txt`, ohne Unterordner).
 Die Daten der TN bleiben im Browser des Handys. Auf dem iPhone nur als Home-Bildschirm-App verlässlich:
 im normalen Safari-Tab kann iOS Website-Daten nach einigen Tagen ohne Besuch löschen.
 
