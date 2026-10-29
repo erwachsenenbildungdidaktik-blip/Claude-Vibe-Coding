@@ -46,6 +46,14 @@ textarea{min-height:45vh;resize:vertical;line-height:1.5}
 .note.ok{background:#e6f4ec;border-color:var(--ok)}
 .note ul{margin:4px 0 0;padding-left:20px}
 .hidden{display:none!important}
+.swatches{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0}
+.sw{width:44px;height:44px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px var(--line);cursor:pointer;padding:0}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 3px var(--ink)}
+.sw.custom{background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);position:relative;overflow:hidden}
+.sw.custom input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;border:0;padding:0}
+#headPreview{border-radius:8px;padding:14px 14px 12px;margin-top:10px;font-family:Helvetica,Arial,sans-serif;border:1px solid var(--line)}
+#headPreview .hn{font-weight:700;font-size:24px;line-height:1.2}
+#headPreview .hc{font-size:13px;margin-top:4px}
 #sigPreview{max-width:100%;max-height:140px;background:#fff;border:1px dashed var(--line);border-radius:8px;padding:6px}
 #pad{width:100%;height:220px;background:#fff;border:2px dashed var(--accent);border-radius:12px;touch-action:none;display:block}
 #pages canvas{width:100%;background:#fff;box-shadow:0 2px 10px #0002;border-radius:4px;margin-bottom:12px;display:block}
@@ -72,12 +80,28 @@ footer{max-width:640px;margin:0 auto;padding:8px 16px 40px;color:var(--muted);fo
     <label for="meTel">Telefon</label><input id="meTel" data-k="meTel" type="tel" autocomplete="tel">
     <label for="meMail">E-Mail</label><input id="meMail" data-k="meMail" type="email" autocomplete="email">
   </div>
+  <div class="card">
+    <label style="margin-top:0;display:flex;gap:10px;align-items:center"><input type="checkbox" id="bar" style="width:26px;height:26px"> Farbbalken oben im Brief</label>
+    <div id="barOpts">
+      <label>Farbe des Balkens</label>
+      <div class="swatches" id="barSwatches"></div>
+      <label>Farbe der Schrift</label>
+      <div class="swatches" id="textSwatches"></div>
+    </div>
+    <div id="headPreview"><div class="hn"></div><div class="hc"></div></div>
+  </div>
   <p class="hint">Das bleibt auf diesem Handy gespeichert. Sie müssen es nur einmal eingeben.</p>
   <button class="btn primary big" data-next>Weiter →</button>
 </section>
 
 <section id="s1">
   <h2>2 · Firma</h2>
+  <div class="card">
+    <label for="fiAll" style="margin-top:0">Ganze Adresse einfügen <small>(z. B. aus dem Inserat kopiert)</small></label>
+    <textarea id="fiAll" style="min-height:110px" placeholder="Muster AG&#10;Frau Anna Muster&#10;Industrieweg 5&#10;3072 Ostermundigen"></textarea>
+    <button class="btn" id="btnFiAll" type="button" style="margin-top:8px;width:100%">⬇️ In die Felder verteilen</button>
+    <p class="hint" id="fiAllHint">Danach unten kontrollieren.</p>
+  </div>
   <div class="card">
     <label for="fiName">Firma</label><input id="fiName" data-k="fiName" placeholder="Muster AG">
     <label for="fiKontakt">Person <small>(wenn bekannt)</small></label><input id="fiKontakt" data-k="fiKontakt" placeholder="Frau Anna Muster">
@@ -180,6 +204,72 @@ document.querySelectorAll('[data-k]').forEach(el => {
 });
 const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
 if (!S.datum || S.datum < today()) { $('datum').value = S.datum = today(); save(); }
+
+/* ---------- Briefkopf: Farbbalken ---------- */
+const BAR_COLORS = [['#1f5f8b', '#ffffff'], ['#0f6e6e', '#ffffff'], ['#2e6b3a', '#ffffff'], ['#7a1f2b', '#ffffff'],
+  ['#333a40', '#ffffff'], ['#4b3a78', '#ffffff'], ['#c25a12', '#ffffff'], ['#e6e8eb', '#1b1f24'], ['#f2d16b', '#1b1f24']];
+const TEXT_COLORS = ['#ffffff', '#1b1f24', '#f2d16b', '#1f5f8b'];
+if (S.bar == null) S.bar = true;
+if (!S.barColor) S.barColor = BAR_COLORS[0][0];
+if (!S.barText) S.barText = BAR_COLORS[0][1];
+function swatches(box, colors, key, onPick) {
+  box.innerHTML = '';
+  colors.forEach(c => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'sw'; b.style.background = c; b.dataset.c = c; b.title = c;
+    b.onclick = () => { S[key] = c; onPick && onPick(c); save(); updateHead(); };
+    box.appendChild(b);
+  });
+  const lab = document.createElement('label'); lab.className = 'sw custom'; lab.title = 'Eigene Farbe';
+  const inp = document.createElement('input'); inp.type = 'color';
+  inp.oninput = () => { S[key] = inp.value; save(); updateHead(); };
+  lab.appendChild(inp); box.appendChild(lab);
+}
+swatches($('barSwatches'), BAR_COLORS.map(c => c[0]), 'barColor', c => { S.barText = BAR_COLORS.find(x => x[0] === c)[1]; });
+swatches($('textSwatches'), TEXT_COLORS, 'barText');
+$('bar').checked = S.bar;
+$('bar').onchange = () => { S.bar = $('bar').checked; save(); updateHead(); };
+function contactParts() {
+  return [[S.meStrasse, S.mePlzOrt].filter(v => v && v.trim()).join(', '),
+          S.meTel && S.meTel.trim() && 'Tel. ' + S.meTel.trim(), S.meMail && S.meMail.trim()].filter(Boolean);
+}
+function updateHead() {
+  $('barOpts').classList.toggle('hidden', !S.bar);
+  const hp = $('headPreview');
+  hp.style.background = S.bar ? S.barColor : '#fff'; hp.style.color = S.bar ? S.barText : '#000';
+  hp.querySelector('.hn').textContent = S.meName || 'Vorname Name';
+  hp.querySelector('.hc').textContent = contactParts().join('  ·  ') || 'Adresse  ·  Tel.  ·  E-Mail';
+  for (const [box, key] of [['barSwatches', 'barColor'], ['textSwatches', 'barText']])
+    $(box).querySelectorAll('.sw[data-c]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.c === S[key])));
+}
+['meName', 'meStrasse', 'mePlzOrt', 'meTel', 'meMail'].forEach(k => $(k).addEventListener('input', updateHead));
+updateHead();
+
+/* ---------- Empfänger: ganze Adresse verteilen ---------- */
+function parseAddress(raw) {
+  let lines = raw.replace(/\r/g, '').split('\n').map(l => l.trim()).filter(Boolean);
+  if (lines.length === 1) lines = lines[0].split(/\s*,\s*/).filter(Boolean);
+  lines = lines.filter(l => !/^(schweiz|switzerland|suisse|svizzera|ch)$/i.test(l));
+  const r = { fiName: '', fiKontakt: '', fiStrasse: '', fiPlzOrt: '' };
+  let pi = -1;
+  lines.forEach((l, i) => { if (/^(ch[- ]?)?\d{4}\s+\S/i.test(l)) pi = i; });
+  if (pi >= 0) { r.fiPlzOrt = lines[pi].replace(/^ch[- ]?/i, ''); lines.splice(pi, 1); pi--; }
+  const streetRx = /\d|strasse|str\.|weg|gasse|platz|postfach|allee|ring|rain|halde/i;
+  if (pi >= 0 && streetRx.test(lines[pi])) { r.fiStrasse = lines[pi]; lines.splice(pi, 1); }
+  else { const si = lines.findIndex((l, i) => i > 0 && streetRx.test(l)); if (si > 0) { r.fiStrasse = lines[si]; lines.splice(si, 1); } }
+  r.fiName = lines.shift() || '';
+  r.fiKontakt = lines.join(', ');
+  return r;
+}
+function applyAddress() {
+  const raw = $('fiAll').value; if (!raw.trim()) return;
+  const r = parseAddress(raw);
+  for (const k in r) { S[k] = r[k]; $(k).value = r[k]; }
+  save();
+  $('fiAllHint').textContent = '✓ Verteilt. Bitte unten kontrollieren und wenn nötig korrigieren.';
+}
+$('btnFiAll').onclick = applyAddress;
+$('fiAll').addEventListener('paste', () => setTimeout(applyAddress, 0));
 
 /* ---------- Schritte ---------- */
 let step = 0;
@@ -427,19 +517,38 @@ const MONATE = ['Januar','Februar','März','April','Mai','Juni','Juli','August',
 function layout(sigImg) {
   lossy.clear();
   const pages = [[]]; let pg = pages[0], y = MT;
-  const text = (s, x, yy, size, bold) => pg.push({ t: 'text', s: enc(s), x, y: yy, size, bold });
+  const text = (s, x, yy, size, bold, c) => pg.push({ t: 'text', s: enc(s), x, y: yy, size, bold, c });
   const newPage = () => { pg = []; pages.push(pg); y = MT; };
   const need = h => { if (y + h > PH - MB) newPage(); };
 
   // Absender
-  const me = [S.meStrasse, S.mePlzOrt, S.meTel && 'Tel. ' + S.meTel, S.meMail].filter(v => v && v.trim());
-  y += 10; text(S.meName || '', ML, y, 11, true);
-  me.forEach(l => { y += 13; text(l, ML, y, 10, false); });
-  // Empfänger (Fenster rechts, Schweizer Norm)
-  let ry = 155;
-  [S.fiName, S.fiKontakt, S.fiStrasse, S.fiPlzOrt].filter(v => v && v.trim()).forEach(l => { text(l, 334.5, ry, 11, false); ry += 14.5; });
+  if (S.bar) {
+    // Farbbalken über die ganze Breite: Name gross, darunter Adresse · Tel. · E-Mail nebeneinander
+    const fg = hexRgb(S.barText), sep = '  ·  ', parts = contactParts(), rows = [];
+    let cur = '';
+    for (const p of parts) {   // passt nicht alles auf eine Zeile → umbrechen
+      const t = cur ? cur + sep + p : p;
+      if (cur && textW(enc(t), false, 10) > CW) { rows.push(cur); cur = p; } else cur = t;
+    }
+    if (cur) rows.push(cur);
+    let ns = 26; while (ns > 14 && textW(enc(S.meName || ''), true, ns) > CW) ns -= 1;
+    const barH = 52 + ns + rows.length * 14;
+    pg.push({ t: 'rect', x: 0, y: 0, w: PW, h: barH, c: hexRgb(S.barColor) });
+    y = 34 + ns; text(S.meName || '', ML, y, ns, true, fg);
+    y += 8;
+    rows.forEach(r => { y += 14; text(r, ML, y, 10, false, fg); });
+    y = barH + 20;
+  } else {
+    const me = [S.meStrasse, S.mePlzOrt, S.meTel && 'Tel. ' + S.meTel, S.meMail].filter(v => v && v.trim());
+    y += 10; text(S.meName || '', ML, y, 11, true);
+    me.forEach(l => { y += 13; text(l, ML, y, 10, false); });
+    y += 20;
+  }
+  // Empfänger (linksbündig)
+  let ry = Math.max(y + 14, 150);
+  [S.fiName, S.fiKontakt, S.fiStrasse, S.fiPlzOrt].filter(v => v && v.trim()).forEach(l => { text(l, ML, ry, 11, false); ry += 14.5; });
   // Ort, Datum
-  y = Math.max(y + 30, ry + 40, 255);
+  y = Math.max(ry + 30, 255);
   const ort = (S.ort && S.ort.trim()) || (S.mePlzOrt || '').replace(/^\s*\d+\s*/, '').trim();
   let ds = '';
   if (S.datum) { const [Y, M, D] = S.datum.split('-').map(Number); ds = `${D}. ${MONATE[M - 1]} ${Y}`; }
@@ -511,6 +620,10 @@ function layout(sigImg) {
     if (line.length || first) flush();
   }
 }
+function hexRgb(h) {
+  const m = /^#?([0-9a-f]{6})$/i.exec(h || '') || [0, '000000'];
+  const n = parseInt(m[1], 16); return [(n >> 16) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
+}
 function parseBold(l) {
   const parts = l.split('**'), runs = [];
   if (parts.length % 2 === 0) { const last = parts.pop(); parts[parts.length - 1] += '**' + last; } // ungerade Anzahl ** = wörtlich
@@ -539,7 +652,9 @@ function buildPdf(pages, sigImg) {
   for (const ops of pages) {
     let c = '';
     for (const o of ops) {
-      if (o.t === 'text') c += `BT /${o.bold ? 'F2' : 'F1'} ${o.size} Tf ${f2(o.x)} ${f2(PH - o.y)} Td ${pdfStr(o.s)} Tj ET\n`;
+      const col = a => a.map(v => f2(v)).join(' ');
+      if (o.t === 'rect') c += `${col(o.c)} rg ${f2(o.x)} ${f2(PH - o.y - o.h)} ${f2(o.w)} ${f2(o.h)} re f 0 g\n`;
+      else if (o.t === 'text') c += `BT ${o.c ? col(o.c) + ' rg ' : ''}/${o.bold ? 'F2' : 'F1'} ${o.size} Tf ${f2(o.x)} ${f2(PH - o.y)} Td ${pdfStr(o.s)} Tj ET${o.c ? ' 0 g' : ''}\n`;
       else c += `q ${f2(o.w)} 0 0 ${f2(o.h)} ${f2(o.x)} ${f2(PH - o.y - o.h)} cm /Im1 Do Q\n`;
     }
     const cs = add([`<< /Length ${c.length} >>\nstream\n`, c, '\nendstream']);
@@ -574,7 +689,10 @@ async function renderPreview() {
     const x = c.getContext('2d'); x.scale(k * dpr, k * dpr);
     x.fillStyle = '#fff'; x.fillRect(0, 0, PW, PH); x.fillStyle = '#000';
     for (const o of ops) {
+      const css = a => `rgb(${a.map(v => Math.round(v * 255)).join(',')})`;
       if (o.t === 'img') { x.drawImage(sig.img, o.x, o.y, o.w, o.h); continue; }
+      if (o.t === 'rect') { x.fillStyle = css(o.c); x.fillRect(o.x, o.y, o.w, o.h); continue; }
+      x.fillStyle = o.c ? css(o.c) : '#000';
       x.font = `${o.bold ? 'bold ' : ''}${o.size}px Helvetica, Arial, "Liberation Sans", sans-serif`;
       x.fillText(decodeWin(o.s), o.x, o.y);
     }
@@ -626,6 +744,7 @@ $('btnNew').onclick = () => {
   if (!confirm('Neuen Brief beginnen?\nFirma, Betreff und Text werden geleert. Ihre Angaben und die Unterschrift bleiben.')) return;
   ['fiName', 'fiKontakt', 'fiStrasse', 'fiPlzOrt', 'betreff', 'text', 'ort'].forEach(k => { S[k] = ''; $(k).value = ''; });
   S.datum = $('datum').value = today();
+  $('fiAll').value = ''; $('fiAllHint').textContent = 'Danach unten kontrollieren.';
   save(); checkPlaceholders(); go(1);
 };
 $('btnWipe').onclick = () => {
