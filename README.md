@@ -46,3 +46,29 @@ Wiederherstellen: „Klienten“ → „Sicherungen“ beim Klienten → Stand a
 
 ## Firefox
 Kein direkter Dateizugriff: „Klienten“ → „Datei laden …“ (Upload) und „Speichern“ (Download), ebenfalls verschlüsselt.
+
+---
+
+# Bewerbung als PDF (Handy-App für TN)
+
+Ordner `bewerbung-handy/`. Web-App fürs Handy: ChatGPT-Text einfügen → Brief mit Adressen, Datum, Betreff
+und Unterschrift → PDF senden (WhatsApp, Mail …) oder speichern. Keine externe Bibliothek, kein Server:
+das PDF entsteht direkt auf dem Handy, Daten bleiben im Browser des Handys („Alle meine Daten löschen“ unten).
+
+**Ablauf für TN:** 1 Ich (einmalig) · 2 Firma · 3 Text · 4 Unterschrift (Foto oder Finger) · 5 PDF.
+„Neuer Brief für andere Firma“ leert nur Firma und Text.
+
+**„✨ Aufräumen“** (läuft automatisch beim Einfügen): ß → ss, Markdown-Listen → •, Trennlinien weg,
+Adressblock/Einleitung vor der Anrede weg (Betreff wird übernommen), alles nach dem Gruss weg.
+Platzhalter wie `[Firma]` werden als Warnung angezeigt. `**fett**` bleibt fett.
+
+**Unterschrift-Foto:** Hintergrund/Schatten wird entfernt und auf die Unterschrift zugeschnitten.
+
+**Grenzen:**
+- Rechtschreibung kommt von der Handy-Tastatur (keine eigene Prüfung, kein Text geht an einen Server).
+- Standard-PDF-Schrift (Helvetica): Buchstaben wie ş, ğ, ć, č werden durch s, g, c, c ersetzt (mit Hinweis).
+- Teilen per WhatsApp/Mail braucht Chrome auf Android (bzw. Safari auf iPhone); sonst wird das PDF gespeichert.
+
+**Installieren:** Die App muss über **https** erreichbar sein (z. B. GitHub Pages). Einmal mit Internet öffnen,
+im Browser-Menü „Zum Startbildschirm hinzufügen“ → läuft danach offline wie eine App.
+Falls doch eine APK nötig ist: die https-Adresse bei pwabuilder.com eingeben.

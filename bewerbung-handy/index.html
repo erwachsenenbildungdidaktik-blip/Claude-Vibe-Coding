@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bewerbung als PDF</title>
+<meta name="theme-color" content="#1f5f8b">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{
+  --bg:#f3f5f7; --card:#fff; --ink:#1b1f24; --muted:#5b6672; --line:#d5dbe1;
+  --accent:#1f5f8b; --accent-ink:#fff; --ok:#1e7a46; --warn:#9a5b00; --warn-bg:#fff4e0; --danger:#b3261e;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:var(--accent);color:var(--accent-ink);padding:12px 16px calc(12px + env(safe-area-inset-top)) ;position:sticky;top:0;z-index:5}
+header h1{margin:0;font-size:20px}
+nav.steps{display:flex;gap:4px;overflow-x:auto;padding:8px 8px 0;background:var(--accent)}
+nav.steps button{flex:1 0 auto;min-width:64px;border:0;border-radius:10px 10px 0 0;padding:8px 6px;background:#ffffff26;color:#fff;font:600 14px/1.2 inherit;cursor:pointer}
+nav.steps button[aria-current="step"]{background:var(--bg);color:var(--accent)}
+nav.steps .n{display:block;font-size:18px}
+main{max-width:640px;margin:0 auto;padding:16px}
+section{display:none}
+section.active{display:block}
+h2{font-size:22px;margin:4px 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+label{display:block;font-weight:600;margin:10px 0 4px}
+label small{font-weight:400;color:var(--muted)}
+input,textarea{width:100%;font:inherit;padding:12px;border:2px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+input:focus,textarea:focus{outline:none;border-color:var(--accent)}
+textarea{min-height:45vh;resize:vertical;line-height:1.5}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:48px;padding:10px 16px;border-radius:12px;border:2px solid var(--accent);background:#fff;color:var(--accent);font:600 17px/1.2 inherit;cursor:pointer}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.big{width:100%;min-height:58px;font-size:19px;margin-top:10px}
+.btn.danger{border-color:var(--danger);color:var(--danger)}
+.btn:disabled{opacity:.45}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row>.btn{flex:1 1 auto}
+.tools{position:sticky;top:0;background:var(--bg);padding:6px 0;z-index:2}
+.tools .btn{min-height:44px;padding:6px 10px;font-size:15px}
+.hint{color:var(--muted);font-size:15px;margin:6px 0}
+.note{background:var(--warn-bg);border-left:5px solid var(--warn);padding:10px 12px;border-radius:8px;margin:10px 0;font-size:16px}
+.note.ok{background:#e6f4ec;border-color:var(--ok)}
+.note ul{margin:4px 0 0;padding-left:20px}
+.hidden{display:none!important}
+#sigPreview{max-width:100%;max-height:140px;background:#fff;border:1px dashed var(--line);border-radius:8px;padding:6px}
+#pad{width:100%;height:220px;background:#fff;border:2px dashed var(--accent);border-radius:12px;touch-action:none;display:block}
+#pages canvas{width:100%;background:#fff;box-shadow:0 2px 10px #0002;border-radius:4px;margin-bottom:12px;display:block}
+footer{max-width:640px;margin:0 auto;padding:8px 16px 40px;color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<header><h1>✉️ Bewerbung als PDF</h1></header>
+<nav class="steps" id="steps">
+  <button data-step="0"><span class="n">1</span>Ich</button>
+  <button data-step="1"><span class="n">2</span>Firma</button>
+  <button data-step="2"><span class="n">3</span>Text</button>
+  <button data-step="3"><span class="n">4</span>Unterschrift</button>
+  <button data-step="4"><span class="n">5</span>PDF</button>
+</nav>
+<main>
+
+<section id="s0">
+  <h2>1 · Meine Angaben</h2>
+  <div class="card">
+    <label for="meName">Vorname und Name</label><input id="meName" data-k="meName" autocomplete="name">
+    <label for="meStrasse">Strasse und Nummer</label><input id="meStrasse" data-k="meStrasse" autocomplete="street-address">
+    <label for="mePlzOrt">PLZ und Ort</label><input id="mePlzOrt" data-k="mePlzOrt" placeholder="3000 Bern">
+    <label for="meTel">Telefon</label><input id="meTel" data-k="meTel" type="tel" autocomplete="tel">
+    <label for="meMail">E-Mail</label><input id="meMail" data-k="meMail" type="email" autocomplete="email">
+  </div>
+  <p class="hint">Das bleibt auf diesem Handy gespeichert. Sie müssen es nur einmal eingeben.</p>
+  <button class="btn primary big" data-next>Weiter →</button>
+</section>
+
+<section id="s1">
+  <h2>2 · Firma</h2>
+  <div class="card">
+    <label for="fiName">Firma</label><input id="fiName" data-k="fiName" placeholder="Muster AG">
+    <label for="fiKontakt">Person <small>(wenn bekannt)</small></label><input id="fiKontakt" data-k="fiKontakt" placeholder="Frau Anna Muster">
+    <label for="fiStrasse">Strasse und Nummer</label><input id="fiStrasse" data-k="fiStrasse">
+    <label for="fiPlzOrt">PLZ und Ort</label><input id="fiPlzOrt" data-k="fiPlzOrt">
+  </div>
+  <div class="card">
+    <label for="ort">Ort für das Datum <small>(leer = mein Wohnort)</small></label><input id="ort" data-k="ort">
+    <label for="datum">Datum</label><input id="datum" data-k="datum" type="date">
+  </div>
+  <button class="btn primary big" data-next>Weiter →</button>
+</section>
+
+<section id="s2">
+  <h2>3 · Brieftext</h2>
+  <div class="card">
+    <label for="betreff">Betreff</label><input id="betreff" data-k="betreff" placeholder="Bewerbung als Lagermitarbeiter">
+  </div>
+  <div class="tools row">
+    <button class="btn primary" id="btnPaste" type="button">📋 Text einfügen</button>
+    <button class="btn" id="btnClean" type="button">✨ Aufräumen</button>
+    <button class="btn" id="btnBold" type="button" title="Markierten Text fett machen"><b>F</b> Fett</button>
+    <button class="btn" id="btnBullet" type="button" title="Zeile als Aufzählung">• Liste</button>
+  </div>
+  <div id="cleanNotes" class="note ok hidden"></div>
+  <label for="text">Text von der Anrede bis zum Gruss</label>
+  <textarea id="text" data-k="text" spellcheck="true" lang="de-CH" autocapitalize="sentences"
+    placeholder="Sehr geehrte Frau Muster&#10;&#10;Mit grossem Interesse habe ich …&#10;&#10;Freundliche Grüsse"></textarea>
+  <div id="placeholderWarn" class="note hidden"></div>
+  <p class="hint">Tipp: Text in ChatGPT kopieren, hier auf <b>📋 Text einfügen</b> tippen. Rot unterstrichene Wörter prüfen
+    (Rechtschreibung kommt von der Handy-Tastatur). <b>**so**</b> wird fett, Zeilen mit <b>•</b> werden eine Liste.</p>
+  <div class="card">
+    <label for="beilagen">Beilagen <small>(eine pro Zeile, optional)</small></label>
+    <textarea id="beilagen" data-k="beilagen" style="min-height:90px" placeholder="Lebenslauf&#10;Arbeitszeugnisse"></textarea>
+  </div>
+  <button class="btn primary big" data-next>Weiter →</button>
+</section>
+
+<section id="s3">
+  <h2>4 · Unterschrift</h2>
+  <div class="card">
+    <p class="hint" style="margin-top:0">Auf weissem Papier mit dunklem Stift unterschreiben und fotografieren – oder direkt mit dem Finger.</p>
+    <div class="row">
+      <button class="btn primary" id="btnPhoto" type="button">📷 Foto / Bild</button>
+      <button class="btn" id="btnDraw" type="button">✍️ Mit Finger</button>
+    </div>
+    <input id="file" type="file" accept="image/*" class="hidden">
+    <div id="drawBox" class="hidden" style="margin-top:12px">
+      <canvas id="pad"></canvas>
+      <div class="row" style="margin-top:8px">
+        <button class="btn" id="padClear" type="button">Neu</button>
+        <button class="btn primary" id="padOk" type="button">✓ Übernehmen</button>
+      </div>
+    </div>
+    <div id="sigBox" class="hidden" style="margin-top:14px">
+      <p class="hint">So sieht die Unterschrift aus:</p>
+      <img id="sigPreview" alt="Unterschrift">
+      <label style="font-weight:400;display:flex;gap:8px;align-items:center"><input type="checkbox" id="sigClean" style="width:24px;height:24px"> Hintergrund entfernen (für Fotos)</label>
+      <div class="row" style="margin-top:8px">
+        <button class="btn" id="sigRotate" type="button">↻ Drehen</button>
+        <button class="btn danger" id="sigRemove" type="button">Entfernen</button>
+      </div>
+    </div>
+  </div>
+  <button class="btn primary big" data-next>Weiter →</button>
+</section>
+
+<section id="s4">
+  <h2>5 · PDF</h2>
+  <div id="checkNotes"></div>
+  <div class="row">
+    <button class="btn primary big" id="btnShare" type="button">📤 PDF senden / teilen</button>
+    <button class="btn big" id="btnSave" type="button">💾 PDF speichern</button>
+  </div>
+  <p class="hint">„Senden“ öffnet WhatsApp, E-Mail usw. mit dem PDF als Anhang.</p>
+  <h2 style="margin-top:20px">Vorschau</h2>
+  <div id="pages"></div>
+  <button class="btn big" id="btnNew" type="button">➕ Neuer Brief für andere Firma</button>
+</section>
+
+</main>
+<footer>
+  Alles bleibt auf diesem Handy, nichts wird ins Internet geschickt.
+  <button class="btn danger" id="btnWipe" type="button" style="margin-top:10px;width:100%">🗑️ Alle meine Daten löschen</button>
+</footer>
+
+<script>
+'use strict';
+/* ---------- Zustand ---------- */
+const KEY = 'bewerbung-pdf.v1';
+let S = {};
+try { S = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { S = {}; }
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+const $ = id => document.getElementById(id);
+
+document.querySelectorAll('[data-k]').forEach(el => {
+  const k = el.dataset.k;
+  if (S[k] != null) el.value = S[k];
+  el.addEventListener('input', () => { S[k] = el.value; save(); if (k === 'text') checkPlaceholders(); });
+});
+const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+if (!S.datum || S.datum < today()) { $('datum').value = S.datum = today(); save(); }
+
+/* ---------- Schritte ---------- */
+let step = 0;
+function go(n) {
+  step = n;
+  document.querySelectorAll('main section').forEach((s, i) => s.classList.toggle('active', i === n));
+  document.querySelectorAll('#steps button').forEach((b, i) => { if (i === n) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); });
+  if (n === 4) renderPreview();
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll('#steps button').forEach(b => b.addEventListener('click', () => go(+b.dataset.step)));
+document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => go(step + 1)));
+
+/* ---------- Text aufräumen (ChatGPT-Ausgabe) ---------- */
+const RX_ANREDE = /^\s*(sehr\s+geehrte|geehrte|guten\s+tag|gr[üu]e?zi|liebe[rs]?\s|hallo)/i;
+const RX_GRUSS = /^\s*(mit\s+)?(freundliche[nr]?|beste[n]?|herzliche[n]?|liebe|viele|sonnige)\s+gr(ü|ue|u)(ss|ß)e?n?\b/i;
+const RX_BETREFF = /^\s*\**\s*(betreff|betr\.)\s*:?\s*/i;
+
+function cleanText(raw) {
+  const notes = [];
+  let t = raw.replace(/\r\n?/g, '\n').replace(/ /g, ' ');
+  if (/ß/.test(t)) { t = t.replace(/ß/g, 'ss'); notes.push('„ß“ durch „ss“ ersetzt (Schweizer Schreibweise).'); }
+  let lines = t.split('\n').map(l => l.replace(/\s+$/, ''));
+  lines = lines.filter(l => !/^\s*([-*_]\s*){3,}$/.test(l));                 // Trennlinien ---
+  lines = lines.map(l => l.replace(/^\s*#{1,6}\s+/, '# ')                    // Überschriften
+                          .replace(/^\s*[-*+•]\s+/, '• '));                  // Aufzählungen
+  let betreff = null;
+  const a = lines.findIndex(l => RX_ANREDE.test(l));
+  if (a > 0) {
+    const before = lines.slice(0, a);
+    const b = before.find(l => RX_BETREFF.test(l)) ||
+              before.slice().reverse().find(l => /bewerbung/i.test(l));
+    if (b) betreff = b.replace(RX_BETREFF, '').replace(/\*\*/g, '').replace(/^#\s*/, '').trim();
+    const n = before.filter(l => l.trim()).length;
+    if (n) notes.push(`${n} Zeile(n) vor der Anrede entfernt (Adressen / Einleitung von ChatGPT). Die Adressen kommen aus Schritt 1 und 2.`);
+    lines = lines.slice(a);
+  }
+  let g = -1;
+  lines.forEach((l, i) => { if (RX_GRUSS.test(l)) g = i; });
+  if (g >= 0 && g < lines.length - 1) {
+    const n = lines.slice(g + 1).filter(l => l.trim()).length;
+    if (n) notes.push(`${n} Zeile(n) nach dem Gruss entfernt. Name und Unterschrift setzt die App selbst.`);
+    lines = lines.slice(0, g + 1);
+  }
+  t = lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+  if (betreff) notes.push(`Betreff übernommen: „${betreff}“`);
+  return { text: t, betreff, notes };
+}
+
+let undoText = null;
+function applyClean(raw) {
+  undoText = { text: $('text').value, betreff: $('betreff').value };
+  const r = cleanText(raw);
+  $('text').value = S.text = r.text;
+  if (r.betreff) $('betreff').value = S.betreff = r.betreff;
+  save(); checkPlaceholders();
+  const box = $('cleanNotes');
+  box.innerHTML = '<b>Aufgeräumt.</b>' + (r.notes.length ? '<ul>' + r.notes.map(n => '<li>' + esc(n) + '</li>').join('') + '</ul>' : ' Nichts zu ändern.') +
+    ' <button class="btn" id="btnUndo" type="button" style="min-height:36px;margin-top:6px">↶ Rückgängig</button>';
+  box.classList.remove('hidden');
+  $('btnUndo').onclick = () => {
+    $('text').value = S.text = undoText.text; $('betreff').value = S.betreff = undoText.betreff;
+    save(); checkPlaceholders(); box.classList.add('hidden');
+  };
+}
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+$('btnClean').onclick = () => applyClean($('text').value);
+$('btnPaste').onclick = async () => {
+  try {
+    const t = await navigator.clipboard.readText();
+    if (!t.trim()) throw new Error('leer');
+    applyClean(t);
+  } catch (e) {
+    $('text').focus();
+    alert('Einfügen ging nicht automatisch.\nLange auf das Textfeld drücken und „Einfügen“ wählen.');
+  }
+};
+$('text').addEventListener('paste', () => {
+  if ($('text').value.trim()) return;           // nur bei leerem Feld automatisch aufräumen
+  setTimeout(() => applyClean($('text').value), 0);
+});
+$('btnBold').onclick = () => {
+  const ta = $('text'), s = ta.selectionStart, e = ta.selectionEnd;
+  if (s === e) { alert('Zuerst ein Wort markieren (lange darauf drücken).'); return; }
+  ta.setRangeText('**' + ta.value.slice(s, e) + '**', s, e, 'end');
+  S.text = ta.value; save(); ta.focus();
+};
+$('btnBullet').onclick = () => {
+  const ta = $('text'), s = ta.selectionStart;
+  const ls = ta.value.lastIndexOf('\n', s - 1) + 1;
+  if (ta.value.startsWith('• ', ls)) ta.setRangeText('', ls, ls + 2, 'end');
+  else ta.setRangeText('• ', ls, ls, 'end');
+  S.text = ta.value; save(); ta.focus();
+};
+function checkPlaceholders() {
+  const found = [...new Set(($('text').value.match(/\[[^\]\n]{1,60}\]/g) || []))];
+  const box = $('placeholderWarn');
+  box.classList.toggle('hidden', !found.length);
+  if (found.length) box.innerHTML = '⚠️ <b>Noch ausfüllen:</b> ' + found.map(esc).join(', ');
+  return found;
+}
+checkPlaceholders();
+
+/* ---------- Unterschrift ---------- */
+function loadImg(src) {
+  return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
+}
+// Hintergrund (Papier, Schatten) entfernen und auf die Tinte zuschneiden
+function processSignature(img, removeBg, rotate) {
+  const max = 1400, k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+  let w = Math.round(img.naturalWidth * k), h = Math.round(img.naturalHeight * k);
+  const rot = ((rotate || 0) % 4 + 4) % 4;
+  const c = document.createElement('canvas');
+  c.width = rot % 2 ? h : w; c.height = rot % 2 ? w : h;
+  let x = c.getContext('2d', { willReadFrequently: true });
+  x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height);
+  x.translate(c.width / 2, c.height / 2); x.rotate(rot * Math.PI / 2);
+  x.drawImage(img, -w / 2, -h / 2, w, h); x.setTransform(1, 0, 0, 1, 0, 0);
+  w = c.width; h = c.height;
+  const d = x.getImageData(0, 0, w, h), p = d.data;
+  const ink = new Float32Array(w * h);
+  let bg = null;
+  if (removeBg) {  // Hintergrund schätzen: stark verkleinern und wieder vergrössern
+    const s = document.createElement('canvas'), sw = Math.max(4, w >> 5), sh = Math.max(4, h >> 5);
+    s.width = sw; s.height = sh;
+    const sx = s.getContext('2d'); sx.imageSmoothingQuality = 'high'; sx.drawImage(c, 0, 0, sw, sh);
+    const b = document.createElement('canvas'); b.width = w; b.height = h;
+    const bx = b.getContext('2d', { willReadFrequently: true }); bx.imageSmoothingQuality = 'high'; bx.drawImage(s, 0, 0, w, h);
+    bg = bx.getImageData(0, 0, w, h).data;
+  }
+  for (let i = 0, j = 0; i < p.length; i += 4, j++) {
+    const L = 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2];
+    if (bg) {
+      const B = Math.max(40, 0.299 * bg[i] + 0.587 * bg[i + 1] + 0.114 * bg[i + 2]);
+      const v = Math.min(1, Math.max(0, (0.82 - L / B) / 0.32));
+      ink[j] = v;
+      const o = 255 - v * 240; p[i] = p[i + 1] = o; p[i + 2] = Math.min(255, o + v * 60);
+    } else ink[j] = L < 160 ? 1 : 0;
+  }
+  x.putImageData(d, 0, 0);
+  // Zuschneiden: Zeilen/Spalten mit genug Tinte
+  const rows = new Uint32Array(h), cols = new Uint32Array(w);
+  for (let yy = 0; yy < h; yy++) for (let xx = 0; xx < w; xx++) if (ink[yy * w + xx] > 0.4) { rows[yy]++; cols[xx]++; }
+  const mr = Math.max(2, w * 0.004), mc = Math.max(2, h * 0.004);
+  let y0 = rows.findIndex(v => v >= mr), y1 = h - 1 - [...rows].reverse().findIndex(v => v >= mr);
+  let x0 = cols.findIndex(v => v >= mc), x1 = w - 1 - [...cols].reverse().findIndex(v => v >= mc);
+  if (y0 < 0 || x0 < 0) { y0 = 0; y1 = h - 1; x0 = 0; x1 = w - 1; }
+  const pad = Math.round(Math.max(x1 - x0, y1 - y0) * 0.04) + 4;
+  x0 = Math.max(0, x0 - pad); y0 = Math.max(0, y0 - pad); x1 = Math.min(w - 1, x1 + pad); y1 = Math.min(h - 1, y1 + pad);
+  const o = document.createElement('canvas'); o.width = x1 - x0 + 1; o.height = y1 - y0 + 1;
+  const ox = o.getContext('2d'); ox.fillStyle = '#fff'; ox.fillRect(0, 0, o.width, o.height);
+  ox.drawImage(c, x0, y0, o.width, o.height, 0, 0, o.width, o.height);
+  return o.toDataURL('image/jpeg', 0.9);
+}
+async function updateSignature() {
+  if (!S.sigRaw) { S.sig = null; save(); showSig(); return; }
+  try {
+    const img = await loadImg(S.sigRaw);
+    S.sig = processSignature(img, !!S.sigClean, S.sigRot || 0);
+  } catch (e) { alert('Das Bild konnte nicht gelesen werden.'); S.sigRaw = S.sig = null; }
+  save(); showSig();
+}
+function showSig() {
+  $('sigBox').classList.toggle('hidden', !S.sig);
+  if (S.sig) $('sigPreview').src = S.sig;
+  $('sigClean').checked = !!S.sigClean;
+}
+showSig();
+$('btnPhoto').onclick = () => $('file').click();
+$('file').onchange = async () => {
+  const f = $('file').files[0]; if (!f) return;
+  const url = URL.createObjectURL(f);
+  try {   // Original verkleinert ablegen, damit es in den Speicher passt
+    const img = await loadImg(url), k = Math.min(1, 1800 / Math.max(img.naturalWidth, img.naturalHeight));
+    const c = document.createElement('canvas'); c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    S.sigRaw = c.toDataURL('image/jpeg', 0.85); S.sigClean = true; S.sigRot = 0;
+  } catch (e) { alert('Das Bild konnte nicht gelesen werden.'); }
+  URL.revokeObjectURL(url); $('file').value = '';
+  $('drawBox').classList.add('hidden');
+  updateSignature();
+};
+$('sigClean').onchange = () => { S.sigClean = $('sigClean').checked; updateSignature(); };
+$('sigRotate').onclick = () => { S.sigRot = ((S.sigRot || 0) + 1) % 4; updateSignature(); };
+$('sigRemove').onclick = () => { S.sigRaw = S.sig = null; save(); showSig(); };
+
+const pad = $('pad'); let padCtx, drawing = false, padUsed = false;
+function padInit() {
+  const r = pad.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+  pad.width = r.width * dpr; pad.height = r.height * dpr;
+  padCtx = pad.getContext('2d'); padCtx.scale(dpr, dpr);
+  padCtx.fillStyle = '#fff'; padCtx.fillRect(0, 0, r.width, r.height);
+  padCtx.lineWidth = 3; padCtx.lineCap = padCtx.lineJoin = 'round'; padCtx.strokeStyle = '#0f1a3a';
+  padUsed = false;
+}
+$('btnDraw').onclick = () => { $('drawBox').classList.remove('hidden'); padInit(); };
+$('padClear').onclick = padInit;
+const pt = e => { const r = pad.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+pad.addEventListener('pointerdown', e => { drawing = true; padUsed = true; pad.setPointerCapture(e.pointerId); padCtx.beginPath(); padCtx.moveTo(...pt(e)); padCtx.lineTo(...pt(e)); padCtx.stroke(); });
+pad.addEventListener('pointermove', e => { if (!drawing) return; padCtx.lineTo(...pt(e)); padCtx.stroke(); });
+pad.addEventListener('pointerup', () => drawing = false);
+pad.addEventListener('pointercancel', () => drawing = false);
+$('padOk').onclick = () => {
+  if (!padUsed) { alert('Bitte zuerst im weissen Feld unterschreiben.'); return; }
+  S.sigRaw = pad.toDataURL('image/jpeg', 0.95); S.sigClean = false; S.sigRot = 0;
+  $('drawBox').classList.add('hidden'); updateSignature();
+};
+
+/* ---------- Schrift (Helvetica, WinAnsi) ---------- */
+const W = {
+  r: [278,278,355,556,556,889,667,191,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,278,278,584,584,584,556,1015,667,667,722,722,667,611,778,722,278,500,667,556,833,722,778,667,778,722,667,611,722,667,944,667,667,611,278,278,278,469,556,333,556,556,500,556,556,278,556,556,222,222,500,222,833,556,556,556,556,333,500,278,556,500,722,500,500,500,334,260,334,584,0,556,0,222,556,333,1000,556,556,333,1000,667,333,1000,0,611,0,0,222,222,333,333,350,556,1000,333,1000,500,333,944,0,500,500,278,333,556,556,556,556,260,556,333,737,370,556,584,333,737,333,400,584,333,333,333,556,537,278,333,333,365,556,834,834,834,611,667,667,667,667,667,667,1000,722,667,667,667,667,278,278,278,278,722,722,778,778,778,778,778,584,778,722,722,722,722,667,667,611,556,556,556,556,556,556,889,500,556,556,556,556,278,278,278,278,556,556,556,556,556,556,556,584,611,556,556,556,556,500,556,500],
+  b: [278,333,474,556,556,889,722,238,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,333,333,584,584,584,611,975,722,722,722,722,667,611,778,722,278,556,722,611,833,722,778,667,778,722,667,611,722,667,944,667,667,611,333,278,333,584,556,333,556,611,556,611,556,333,611,611,278,278,556,278,889,611,611,611,611,389,556,333,611,556,778,556,556,500,389,280,389,584,0,556,0,278,556,500,1000,556,556,333,1000,667,333,1000,0,611,0,0,278,278,500,500,350,556,1000,333,1000,556,333,944,0,500,556,278,333,556,556,556,556,280,556,333,737,370,556,584,333,737,333,400,584,333,333,333,611,556,278,333,333,365,556,834,834,834,611,722,722,722,722,722,722,1000,722,667,667,667,667,278,278,278,278,722,722,778,778,778,778,778,584,778,722,722,722,722,667,667,611,556,556,556,556,556,556,889,556,556,556,556,556,278,278,278,278,611,611,611,611,611,611,611,584,611,611,611,611,611,556,611,556]
+};
+const WIN = {338:140,339:156,352:138,353:154,376:159,381:142,382:158,402:131,710:136,732:152,8211:150,8212:151,8216:145,8217:146,8218:130,8220:147,8221:148,8222:132,8224:134,8225:135,8226:149,8230:133,8240:137,8249:139,8250:155,8364:128,8482:153};
+const ALIAS = {8209:45,8208:45,8722:45,8239:32,8201:32,8202:32,8194:32,8195:32,8203:-1,65279:-1};
+function winCode(ch) {
+  let c = ch.codePointAt(0);
+  if (ALIAS[c] != null) c = ALIAS[c];
+  if (c < 0) return -1;
+  if (c === 9) return 32;
+  if (c >= 32 && c < 127) return c;
+  if (c >= 160 && c < 256) return c;
+  if (WIN[c]) return WIN[c];
+  // Standardschrift kennt z. B. ş, ğ, ć, ı nicht: Grundbuchstabe statt '?'
+  const base = { 305: 'i', 321: 'L', 322: 'l', 272: 'D', 273: 'd', 399: 'E', 601: 'e' }[c] || ch.normalize('NFD')[0];
+  if (base !== ch && winCode(base) !== 63) { lossy.add(ch + ' → ' + base); return winCode(base); }
+  if (c !== 63) lossy.add(ch + ' → ?');
+  return 63;
+}
+const lossy = new Set();
+function enc(s) { let o = ''; for (const ch of s) { const c = winCode(ch); if (c >= 0) o += String.fromCharCode(c); } return o; }
+function textW(encStr, bold, size) {
+  const t = bold ? W.b : W.r; let w = 0;
+  for (let i = 0; i < encStr.length; i++) w += t[encStr.charCodeAt(i) - 32] || 0;
+  return w * size / 1000;
+}
+
+/* ---------- Layout: erzeugt Zeichenbefehle pro Seite ---------- */
+const PW = 595.28, PH = 841.89, ML = 70.9, MR = 56.7, MT = 56.7, MB = 62, CW = PW - ML - MR;
+const MONATE = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+
+function layout(sigImg) {
+  lossy.clear();
+  const pages = [[]]; let pg = pages[0], y = MT;
+  const text = (s, x, yy, size, bold) => pg.push({ t: 'text', s: enc(s), x, y: yy, size, bold });
+  const newPage = () => { pg = []; pages.push(pg); y = MT; };
+  const need = h => { if (y + h > PH - MB) newPage(); };
+
+  // Absender
+  const me = [S.meStrasse, S.mePlzOrt, S.meTel && 'Tel. ' + S.meTel, S.meMail].filter(v => v && v.trim());
+  y += 10; text(S.meName || '', ML, y, 11, true);
+  me.forEach(l => { y += 13; text(l, ML, y, 10, false); });
+  // Empfänger (Fenster rechts, Schweizer Norm)
+  let ry = 155;
+  [S.fiName, S.fiKontakt, S.fiStrasse, S.fiPlzOrt].filter(v => v && v.trim()).forEach(l => { text(l, 334.5, ry, 11, false); ry += 14.5; });
+  // Ort, Datum
+  y = Math.max(y + 30, ry + 40, 255);
+  const ort = (S.ort && S.ort.trim()) || (S.mePlzOrt || '').replace(/^\s*\d+\s*/, '').trim();
+  let ds = '';
+  if (S.datum) { const [Y, M, D] = S.datum.split('-').map(Number); ds = `${D}. ${MONATE[M - 1]} ${Y}`; }
+  text([ort, ds].filter(Boolean).join(', '), ML, y, 11, false);
+  // Betreff
+  y += 34;
+  if (S.betreff && S.betreff.trim()) { wrapRuns([[S.betreff.trim(), true]], ML, CW, 12, 15); y += 22; }
+  else y += 8;
+
+  // Fliesstext
+  const size = 11, lh = 15.2;
+  const lines = (S.text || '').replace(/\r/g, '').split('\n');
+  for (const raw of lines) {
+    if (!raw.trim()) { y += lh * 0.7; continue; }
+    let l = raw, x = ML, w = CW, sz = size, bulletAt = null;
+    if (/^#\s+/.test(l)) { l = '**' + l.replace(/^#\s+/, '').replace(/\*\*/g, '') + '**'; sz = 12; y += 4; }
+    else if (/^\s*•\s+/.test(l)) { l = l.replace(/^\s*•\s+/, ''); bulletAt = ML + 4; x = ML + 18; w = CW - 18; }
+    wrapRuns(parseBold(l), x, w, sz, lh, bulletAt);
+  }
+
+  // Unterschrift + Name
+  const sigH = sigImg ? Math.min(52, 170 * sigImg.h / sigImg.w) : 0;
+  const sigW = sigImg ? sigH * sigImg.w / sigImg.h : 0;
+  need(8 + (sigImg ? sigH + 8 : 34) + lh);
+  y += 8;
+  if (sigImg) { pg.push({ t: 'img', x: ML, y: y, w: sigW, h: sigH }); y += sigH + 6; }
+  else y += 34;
+  y += lh - 4; text(S.meName || '', ML, y, size, false);
+
+  // Beilagen
+  const beil = (S.beilagen || '').split('\n').map(s => s.replace(/^\s*[-•*]\s*/, '').trim()).filter(Boolean);
+  if (beil.length) {
+    need(40 + beil.length * lh);
+    y += 40; text('Beilagen', ML, y, 10, true);
+    beil.forEach(b => { y += 13; text('– ' + b, ML, y, 10, false); });
+  }
+  return pages;
+
+  function wrapRuns(runs, x0, width, sz, lhh, bulletAt) {
+    // Wörter mit Schriftschnitt
+    const words = [];
+    for (const [s, bold] of runs) for (const part of s.split(/(\s+)/)) if (part) words.push({ s: enc(part.replace(/\s+/g, ' ')), bold, sp: /^\s+$/.test(part) });
+    let line = [], lw = 0, first = true;
+    const flush = () => {
+      while (line.length && line[line.length - 1].sp) line.pop();
+      need(lhh); y += lhh;
+      if (first && bulletAt != null) text('•', bulletAt, y, sz, false);
+      first = false;
+      let xx = x0; // gleiche Schnitte zusammenfassen
+      let cur = null;
+      for (const w of line) {
+        if (cur && cur.bold === w.bold) cur.s += w.s;
+        else { if (cur) { pg.push(cur); xx += textW(cur.s, cur.bold, sz); } cur = { t: 'text', s: w.s, x: xx, y, size: sz, bold: w.bold }; }
+      }
+      if (cur) pg.push(cur);
+      line = []; lw = 0;
+    };
+    for (const w of words) {
+      const ww = textW(w.s, w.bold, sz);
+      if (w.sp && !line.length) continue;
+      if (!w.sp && lw + ww > width && line.length) flush();
+      if (!w.sp && ww > width) { // überlanges Wort hart umbrechen
+        let chunk = '';
+        for (const ch of w.s) { if (textW(chunk + ch, w.bold, sz) > width) { line.push({ ...w, s: chunk }); flush(); chunk = ''; } chunk += ch; }
+        line.push({ ...w, s: chunk }); lw = textW(chunk, w.bold, sz); continue;
+      }
+      line.push(w); lw += ww;
+    }
+    if (line.length || first) flush();
+  }
+}
+function parseBold(l) {
+  const parts = l.split('**'), runs = [];
+  if (parts.length % 2 === 0) { const last = parts.pop(); parts[parts.length - 1] += '**' + last; } // ungerade Anzahl ** = wörtlich
+  parts.forEach((p, i) => { if (p) runs.push([p, i % 2 === 1]); });
+  return runs;
+}
+
+/* ---------- PDF schreiben ---------- */
+function b64ToBytes(b64) { const s = atob(b64), a = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) a[i] = s.charCodeAt(i); return a; }
+function strBytes(s) { const a = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) a[i] = s.charCodeAt(i) & 255; return a; }
+const pdfStr = s => '(' + s.replace(/[\\()]/g, '\\$&') + ')';
+const f2 = n => (Math.round(n * 100) / 100).toString();
+
+function buildPdf(pages, sigImg) {
+  const objs = []; // jedes Objekt: Array von Teilen (String oder Uint8Array)
+  const add = parts => { objs.push(parts); return objs.length; };
+  const catalog = add(null), pagesId = add(null);
+  const fR = add(['<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>']);
+  const fB = add(['<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>']);
+  let imId = 0;
+  if (sigImg) {
+    const bytes = b64ToBytes(sigImg.src.split(',')[1]);
+    imId = add([`<< /Type /XObject /Subtype /Image /Width ${sigImg.w} /Height ${sigImg.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${bytes.length} >>\nstream\n`, bytes, '\nendstream']);
+  }
+  const kids = [];
+  for (const ops of pages) {
+    let c = '';
+    for (const o of ops) {
+      if (o.t === 'text') c += `BT /${o.bold ? 'F2' : 'F1'} ${o.size} Tf ${f2(o.x)} ${f2(PH - o.y)} Td ${pdfStr(o.s)} Tj ET\n`;
+      else c += `q ${f2(o.w)} 0 0 ${f2(o.h)} ${f2(o.x)} ${f2(PH - o.y - o.h)} cm /Im1 Do Q\n`;
+    }
+    const cs = add([`<< /Length ${c.length} >>\nstream\n`, c, '\nendstream']);
+    const res = `<< /Font << /F1 ${fR} 0 R /F2 ${fB} 0 R >>${imId ? ` /XObject << /Im1 ${imId} 0 R >>` : ''} >>`;
+    kids.push(add([`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources ${res} /Contents ${cs} 0 R >>`]));
+  }
+  objs[catalog - 1] = [`<< /Type /Catalog /Pages ${pagesId} 0 R >>`];
+  objs[pagesId - 1] = [`<< /Type /Pages /Kids [${kids.map(k => k + ' 0 R').join(' ')}] /Count ${kids.length} >>`];
+  const info = add([`<< /Title ${pdfStr(enc('Bewerbung ' + (S.meName || '')))} /Producer (Bewerbung als PDF) >>`]);
+
+  const out = []; let pos = 0; const offs = [];
+  const push = p => { const b = typeof p === 'string' ? strBytes(p) : p; out.push(b); pos += b.length; };
+  push('%PDF-1.4\n%\xe2\xe3\xcf\xd3\n');
+  objs.forEach((parts, i) => { offs.push(pos); push(`${i + 1} 0 obj\n`); parts.forEach(push); push('\nendobj\n'); });
+  const xref = pos;
+  push(`xref\n0 ${objs.length + 1}\n0000000000 65535 f \n` + offs.map(o => String(o).padStart(10, '0') + ' 00000 n \n').join(''));
+  push(`trailer\n<< /Size ${objs.length + 1} /Root ${catalog} 0 R /Info ${info} 0 R >>\nstartxref\n${xref}\n%%EOF\n`);
+  return new Blob(out, { type: 'application/pdf' });
+}
+
+/* ---------- Vorschau, Prüfung, Teilen ---------- */
+async function sigInfo() {
+  if (!S.sig) return null;
+  try { const i = await loadImg(S.sig); return { src: S.sig, w: i.naturalWidth, h: i.naturalHeight, img: i }; } catch (e) { return null; }
+}
+async function renderPreview() {
+  const sig = await sigInfo(), pages = layout(sig), box = $('pages');
+  box.innerHTML = '';
+  const cssW = Math.min(box.clientWidth || 600, 640), dpr = Math.min(3, window.devicePixelRatio || 1), k = cssW / PW;
+  for (const ops of pages) {
+    const c = document.createElement('canvas'); c.width = cssW * dpr; c.height = cssW * PH / PW * dpr;
+    const x = c.getContext('2d'); x.scale(k * dpr, k * dpr);
+    x.fillStyle = '#fff'; x.fillRect(0, 0, PW, PH); x.fillStyle = '#000';
+    for (const o of ops) {
+      if (o.t === 'img') { x.drawImage(sig.img, o.x, o.y, o.w, o.h); continue; }
+      x.font = `${o.bold ? 'bold ' : ''}${o.size}px Helvetica, Arial, "Liberation Sans", sans-serif`;
+      x.fillText(decodeWin(o.s), o.x, o.y);
+    }
+    box.appendChild(c);
+  }
+  // Hinweise
+  const warn = [];
+  if (!S.meName) warn.push('Ihr Name fehlt (Schritt 1).');
+  if (!S.fiName) warn.push('Die Firma fehlt (Schritt 2).');
+  if (!(S.text || '').trim()) warn.push('Der Brieftext fehlt (Schritt 3).');
+  const ph = checkPlaceholders(); if (ph.length) warn.push('Platzhalter noch ausfüllen: ' + ph.join(', '));
+  if (!S.sig) warn.push('Keine Unterschrift (Schritt 4).');
+  if (lossy.size) warn.push('Diese Zeichen kann das PDF nicht darstellen und hat sie ersetzt: ' + [...lossy].join(', '));
+  if (pages.length > 1) warn.push(`Der Brief hat ${pages.length} Seiten. Ein Bewerbungsbrief sollte auf 1 Seite passen – Text kürzen.`);
+  $('checkNotes').innerHTML = warn.length
+    ? '<div class="note"><b>Bitte prüfen:</b><ul>' + warn.map(w => '<li>' + esc(w) + '</li>').join('') + '</ul></div>'
+    : '<div class="note ok">✓ Alles ausgefüllt.</div>';
+}
+function decodeWin(s) {
+  const rev = {}; for (const k in WIN) rev[WIN[k]] = String.fromCodePoint(+k);
+  let o = ''; for (let i = 0; i < s.length; i++) { const c = s.charCodeAt(i); o += rev[c] || String.fromCharCode(c); } return o;
+}
+function fileName() {
+  const clean = s => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^\w-]+/g, '_').replace(/^_+|_+$/g, '');
+  return ['Bewerbung', clean(S.meName), clean(S.fiName)].filter(Boolean).join('_') + '.pdf';
+}
+async function makeFile() {
+  const sig = await sigInfo();
+  return new File([buildPdf(layout(sig), sig)], fileName(), { type: 'application/pdf' });
+}
+function download(file) {
+  const a = document.createElement('a'); a.href = URL.createObjectURL(file); a.download = file.name;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+}
+$('btnShare').onclick = async () => {
+  const file = await makeFile();
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try { await navigator.share({ files: [file], title: file.name }); } catch (e) { /* abgebrochen */ }
+  } else {
+    download(file);
+    alert('Teilen geht in diesem Browser nicht. Das PDF wurde gespeichert (Ordner „Downloads“).');
+  }
+};
+$('btnSave').onclick = async () => download(await makeFile());
+$('btnNew').onclick = () => {
+  if (!confirm('Neuen Brief beginnen?\nFirma, Betreff und Text werden geleert. Ihre Angaben und die Unterschrift bleiben.')) return;
+  ['fiName', 'fiKontakt', 'fiStrasse', 'fiPlzOrt', 'betreff', 'text', 'ort'].forEach(k => { S[k] = ''; $(k).value = ''; });
+  S.datum = $('datum').value = today();
+  save(); checkPlaceholders(); go(1);
+};
+$('btnWipe').onclick = () => {
+  if (!confirm('Wirklich ALLE Daten auf diesem Handy löschen (Adresse, Texte, Unterschrift)?')) return;
+  try { localStorage.removeItem(KEY); } catch (e) {}
+  location.reload();
+};
+
+go(0);
+if ('serviceWorker' in navigator && /^https:|^http:\/\/localhost/.test(location.href)) navigator.serviceWorker.register('sw.js').catch(() => {});
+</script>
+</body>
+</html>
