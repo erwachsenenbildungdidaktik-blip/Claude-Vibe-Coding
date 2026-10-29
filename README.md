@@ -72,3 +72,23 @@ Platzhalter wie `[Firma]` werden als Warnung angezeigt. `**fett**` bleibt fett.
 **Installieren:** Die App muss über **https** erreichbar sein (z. B. GitHub Pages). Einmal mit Internet öffnen,
 im Browser-Menü „Zum Startbildschirm hinzufügen“ → läuft danach offline wie eine App.
 Falls doch eine APK nötig ist: die https-Adresse bei pwabuilder.com eingeben.
+
+## Android-APK (Installation per USB-Kabel)
+
+Ordner `android/`: schlanke Hülle um `bewerbung-handy/` (Offline, keine Internet-Berechtigung).
+Teilen/Speichern laufen über Android, Unterschrift per Kamera oder Galerie, Zurück-Taste = Schritt zurück.
+
+**Bauen:** GitHub Actions („Android-APK bauen“) baut bei jeder Änderung eine **unsignierte** APK
+(Artefakt und Branch `apk-build`). Signiert wird separat mit dem Schlüssel `bewerbung-pdf.keystore`.
+Der Schlüssel liegt **nicht** im Repo (öffentlich). Ihn gut aufbewahren: Updates müssen mit demselben
+Schlüssel signiert sein, sonst muss die App deinstalliert werden und die gespeicherten Angaben der TN sind weg.
+
+**Auf ein TN-Handy laden:**
+1. Handy per USB-C anschliessen, auf dem Handy „Dateiübertragung“ wählen.
+2. `Bewerbung-PDF.apk` in den Ordner `Download` kopieren.
+3. Auf dem Handy: App „Dateien“ → Downloads → `Bewerbung-PDF.apk` antippen.
+4. „Installation aus dieser Quelle erlauben“ bestätigen, dann „Installieren“.
+   Warnt Play Protect („unbekannter Entwickler“): „Weitere Details“ → „Trotzdem installieren“.
+5. Danach die Erlaubnis aus Schritt 4 wieder ausschalten (Einstellungen → Apps → Dateien).
+
+Läuft ab Android 7.
