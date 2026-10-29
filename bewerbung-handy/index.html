@@ -247,10 +247,12 @@ function applyClean(raw) {
 }
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
+// In der Android-App: natives Gegenstück (Zwischenablage, Teilen, Speichern)
+const APP = window.AndroidApp || null;
 $('btnClean').onclick = () => applyClean($('text').value);
 $('btnPaste').onclick = async () => {
   try {
-    const t = await navigator.clipboard.readText();
+    const t = APP ? APP.readClipboard() : await navigator.clipboard.readText();
     if (!t.trim()) throw new Error('leer');
     applyClean(t);
   } catch (e) {
@@ -603,12 +605,15 @@ async function makeFile() {
   const sig = await sigInfo();
   return new File([buildPdf(layout(sig), sig)], fileName(), { type: 'application/pdf' });
 }
+const toB64 = blob => new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result.split(',')[1]); r.readAsDataURL(blob); });
 function download(file) {
+  if (APP) { toB64(file).then(b => APP.savePdf(b, file.name)); return; }
   const a = document.createElement('a'); a.href = URL.createObjectURL(file); a.download = file.name;
   document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
 }
 $('btnShare').onclick = async () => {
   const file = await makeFile();
+  if (APP) { APP.sharePdf(await toB64(file), file.name); return; }
   if (navigator.canShare && navigator.canShare({ files: [file] })) {
     try { await navigator.share({ files: [file], title: file.name }); } catch (e) { /* abgebrochen */ }
   } else {
@@ -630,7 +635,8 @@ $('btnWipe').onclick = () => {
 };
 
 go(0);
-if ('serviceWorker' in navigator && /^https:|^http:\/\/localhost/.test(location.href)) navigator.serviceWorker.register('sw.js').catch(() => {});
+window.appBack = () => { if (step > 0) { go(step - 1); return true; } return false; };  // Zurück-Taste in der App
+if (!APP && 'serviceWorker' in navigator && /^https:|^http:\/\/localhost/.test(location.href)) navigator.serviceWorker.register('sw.js').catch(() => {});
 </script>
 </body>
 </html>

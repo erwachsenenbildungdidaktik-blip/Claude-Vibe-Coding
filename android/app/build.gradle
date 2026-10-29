@@ -1,0 +1,35 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'ch.bewerbung.pdf'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'ch.bewerbung.pdf'
+        minSdk 24
+        targetSdk 34
+        versionCode Integer.parseInt(System.getenv('VERSION_CODE') ?: '1')
+        versionName "1.${versionCode}"
+    }
+
+    buildTypes {
+        // Unsigniert: Der Schlüssel liegt nicht im (öffentlichen) Repo, signiert wird separat.
+        release { minifyEnabled false }
+    }
+
+    // Die Web-App (bewerbung-handy/) wird 1:1 in die APK gepackt.
+    sourceSets {
+        main { assets.srcDirs = ['../../bewerbung-handy'] }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core:1.13.1'
+}
