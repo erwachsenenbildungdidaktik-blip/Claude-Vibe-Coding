@@ -1,8 +1,8 @@
-name: Android-APK bauen
+name: ANDROID · APK bauen
 
 on:
   push:
-    paths: ['android/**', 'bewerbung-handy/**', '.github/workflows/android-apk.yml']
+    paths: ['android-app/**', 'ios-webapp/**', '.github/workflows/android-apk.yml']
   workflow_dispatch:
 
 permissions:
@@ -19,18 +19,18 @@ jobs:
         with: { gradle-version: '8.14.3' }
       - name: APK bauen (unsigniert)
         env: { VERSION_CODE: '${{ github.run_number }}' }
-        run: gradle -p android --no-daemon assembleRelease
+        run: gradle -p android-app --no-daemon assembleRelease
       - uses: actions/upload-artifact@v4
         with:
-          name: bewerbung-pdf-unsigned
-          path: android/app/build/outputs/apk/release/*.apk
-      # Unsignierte APK auf Branch "apk-build" ablegen (wird anschliessend separat signiert)
-      - name: Auf Branch apk-build ablegen
+          name: Bewerbung-PDF-Android-unsigniert
+          path: android-app/app/build/outputs/apk/release/*.apk
+      # Unsignierte APK auf Branch "android-apk-build" ablegen (wird anschliessend separat signiert)
+      - name: Auf Branch android-apk-build ablegen
         run: |
-          mkdir out && cp android/app/build/outputs/apk/release/app-release-unsigned.apk out/
+          mkdir out && cp android-app/app/build/outputs/apk/release/app-release-unsigned.apk out/Bewerbung-PDF-Android-unsigniert.apk
           echo "${{ github.run_number }} ${{ github.sha }}" > out/BUILD.txt
           # Offizielles apksigner aus den Build-Tools mitgeben (zum Signieren ausserhalb von GitHub)
           cp "$(ls -d $ANDROID_HOME/build-tools/*/ | sort -V | tail -1)lib/apksigner.jar" out/
-          cd out && git init -q -b apk-build && git add . \
+          cd out && git init -q -b android-apk-build && git add . \
             && git -c user.name=ci -c user.email=ci@localhost commit -qm "APK ${{ github.run_number }}" \
-            && git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" apk-build
+            && git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" android-apk-build

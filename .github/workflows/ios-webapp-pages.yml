@@ -1,11 +1,11 @@
-# GitHub Pages: veröffentlicht nur die Web-App (bewerbung-handy/).
+# iOS · GitHub Pages: veröffentlicht nur die iOS-Web-App (ios-webapp/).
 # Einmalig nötig: Settings → Pages → Source: „GitHub Actions“.
-name: Web-App auf GitHub Pages
+name: iOS · Web-App auf GitHub Pages
 
 on:
   push:
     branches: [main]
-    paths: ['bewerbung-handy/**', '.github/workflows/pages.yml']
+    paths: ['ios-webapp/**', '.github/workflows/ios-webapp-pages.yml']
   workflow_dispatch:
 
 permissions:
@@ -27,6 +27,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
-        with: { path: bewerbung-handy }
+        with: { path: ios-webapp }
       - id: deployment
         uses: actions/deploy-pages@v4

@@ -1,6 +1,6 @@
-# Netlify: veröffentlicht nur die Web-App (bewerbung-handy/), nicht den Rest des Repos.
+# iOS · Netlify: veröffentlicht nur die iOS-Web-App (ios-webapp/), nicht den Rest des Repos.
 [build]
-  publish = "bewerbung-handy"
+  publish = "ios-webapp"
   command = ""
 
 # Service Worker und Startseite nie lange zwischenspeichern, damit Updates ankommen

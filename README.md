@@ -53,7 +53,16 @@ Kein direkter Dateizugriff: „Klienten“ → „Datei laden …“ (Upload) un
 
 © 2026 Hugo Rohrbacher, alle Rechte vorbehalten (siehe `LICENSE`).
 
-Ordner `bewerbung-handy/`. Web-App fürs Handy: ChatGPT-Text einfügen → Brief mit Adressen, Datum, Betreff
+| Ordner / Datei | Plattform | Inhalt |
+|---|---|---|
+| `ios-webapp/` | **iOS** (Web-App) · wird auch in die Android-App eingepackt | Die App selbst (HTML), eine Codebasis für beide |
+| `android-app/` | **Android** | Android-Projekt (Hülle um `ios-webapp/`) |
+| `android-apk/Bewerbung-PDF-Android.apk` | **Android** | Installierbare, signierte APK |
+| `.github/workflows/android-apk.yml` | **Android** | Baut die APK (unsigniert, Branch `android-apk-build`) |
+| `.github/workflows/ios-webapp-pages.yml` | **iOS** | Veröffentlicht die Web-App auf GitHub Pages |
+| `netlify.toml` | **iOS** | Veröffentlicht die Web-App auf Netlify |
+
+Web-App fürs Handy: ChatGPT-Text einfügen → Brief mit Adressen, Datum, Betreff
 und Unterschrift → PDF senden (WhatsApp, Mail …) oder speichern. Keine externe Bibliothek, kein Server:
 das PDF entsteht direkt auf dem Handy, Daten bleiben im Browser des Handys („Alle meine Daten löschen“ unten).
 
@@ -75,15 +84,15 @@ Platzhalter wie `[Firma]` werden als Warnung angezeigt. `**fett**` bleibt fett.
 im Browser-Menü „Zum Startbildschirm hinzufügen“ → läuft danach offline wie eine App.
 Falls doch eine APK nötig ist: die https-Adresse bei pwabuilder.com eingeben.
 
-## Web-App für iPhone (und alle anderen Handys)
+## iOS · Web-App für iPhone (läuft auch auf anderen Handys im Browser)
 
-Derselbe Ordner `bewerbung-handy/` läuft auch als Web-App. Er muss über **https** erreichbar sein.
+Der Ordner `ios-webapp/` läuft als Web-App. Er muss über **https** erreichbar sein.
 Veröffentlicht wird nur dieser Ordner, nicht der Rest des Repos.
 
 **Variante A: Netlify** (am einfachsten)
 1. Auf netlify.com ein kostenloses Konto anlegen.
 2. „Add new site“ → „Deploy manually“ wählen.
-3. Den Ordner `bewerbung-handy` ins Browserfenster ziehen.
+3. Den Ordner `ios-webapp` ins Browserfenster ziehen.
 4. Die angezeigte Adresse (…netlify.app) auf dem iPhone in **Safari** öffnen.
 5. Teilen (□↑) → „Zum Home-Bildschirm“ → „Hinzufügen“.
    (Alternativ Repo verbinden: `netlify.toml` setzt Ordner und Sicherheits-Header automatisch.)
@@ -91,7 +100,7 @@ Veröffentlicht wird nur dieser Ordner, nicht der Rest des Repos.
 **Variante B: GitHub Pages**
 1. Den Branch mit der App nach `main` übernehmen (Pull Request).
 2. Im Repo: Settings → Pages → Source: **„GitHub Actions“**.
-3. Unter „Actions“ den Workflow „Web-App auf GitHub Pages“ starten (oder auf `main` pushen).
+3. Unter „Actions“ den Workflow „iOS · Web-App auf GitHub Pages“ starten (oder auf `main` pushen).
 4. Die Adresse `https://<konto>.github.io/<repo>/` auf dem iPhone in **Safari** öffnen.
 5. Teilen (□↑) → „Zum Home-Bildschirm“ → „Hinzufügen“.
    Achtung: Pages für **private** Repos geht nur mit einem kostenpflichtigen GitHub-Plan.
@@ -100,20 +109,20 @@ Veröffentlicht wird nur dieser Ordner, nicht der Rest des Repos.
 Die Daten der TN bleiben im Browser des Handys. Auf dem iPhone nur als Home-Bildschirm-App verlässlich:
 im normalen Safari-Tab kann iOS Website-Daten nach einigen Tagen ohne Besuch löschen.
 
-## Android-APK (Installation per USB-Kabel)
+## Android · APK (Installation per USB-Kabel)
 
-Ordner `android/`: schlanke Hülle um `bewerbung-handy/` (Offline, keine Internet-Berechtigung).
+Ordner `android-app/`: schlanke Hülle um `ios-webapp/` (Offline, keine Internet-Berechtigung).
 Teilen/Speichern laufen über Android, Unterschrift per Kamera oder Galerie, Zurück-Taste = Schritt zurück.
 
-**Bauen:** GitHub Actions („Android-APK bauen“) baut bei jeder Änderung eine **unsignierte** APK
-(Artefakt und Branch `apk-build`). Signiert wird separat mit dem Schlüssel `bewerbung-pdf.keystore`.
+**Bauen:** GitHub Actions („ANDROID · APK bauen“) baut bei jeder Änderung eine **unsignierte** APK
+(Artefakt und Branch `android-apk-build`). Signiert wird separat mit dem Schlüssel `bewerbung-pdf.keystore`.
 Der Schlüssel liegt **nicht** im Repo (öffentlich). Ihn gut aufbewahren: Updates müssen mit demselben
 Schlüssel signiert sein, sonst muss die App deinstalliert werden und die gespeicherten Angaben der TN sind weg.
 
 **Auf ein TN-Handy laden:**
 1. Handy per USB-C anschliessen, auf dem Handy „Dateiübertragung“ wählen.
-2. `Bewerbung-PDF.apk` in den Ordner `Download` kopieren.
-3. Auf dem Handy: App „Dateien“ → Downloads → `Bewerbung-PDF.apk` antippen.
+2. `Bewerbung-PDF-Android.apk` in den Ordner `Download` kopieren.
+3. Auf dem Handy: App „Dateien“ → Downloads → `Bewerbung-PDF-Android.apk` antippen.
 4. „Installation aus dieser Quelle erlauben“ bestätigen, dann „Installieren“.
    Warnt Play Protect („unbekannter Entwickler“): „Weitere Details“ → „Trotzdem installieren“.
 5. Danach die Erlaubnis aus Schritt 4 wieder ausschalten (Einstellungen → Apps → Dateien).

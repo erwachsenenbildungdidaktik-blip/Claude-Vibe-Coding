@@ -19,9 +19,9 @@ android {
         release { minifyEnabled false }
     }
 
-    // Die Web-App (bewerbung-handy/) wird 1:1 in die APK gepackt.
+    // Die iOS-Web-App (ios-webapp/) wird 1:1 als assets/ in die APK gepackt (eine Codebasis).
     sourceSets {
-        main { assets.srcDirs = ['../../bewerbung-handy'] }
+        main { assets.srcDirs = ['../../ios-webapp'] }
     }
 
     compileOptions {
