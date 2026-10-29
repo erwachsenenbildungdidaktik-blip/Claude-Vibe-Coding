@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace 'ch.bewerbung.pdf'
-    compileSdk 34
+    compileSdk 36
 
     defaultConfig {
         applicationId 'ch.bewerbung.pdf'
         minSdk 24
-        targetSdk 34
+        targetSdk 36
         versionCode Integer.parseInt(System.getenv('VERSION_CODE') ?: '1')
         versionName "1.${versionCode}"
     }
@@ -31,5 +31,5 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.core:core:1.13.1'
+    implementation 'androidx.core:core:1.17.0'
 }

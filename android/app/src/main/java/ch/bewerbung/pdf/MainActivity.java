@@ -7,10 +7,14 @@ import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Insets;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.window.OnBackInvokedDispatcher;
 import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
 import android.webkit.ValueCallback;
@@ -19,6 +23,8 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.view.WindowInsets;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
@@ -42,7 +48,20 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle state) {
         super.onCreate(state);
         web = new WebView(this);
-        setContentView(web);
+        // Ab Android 15 zeichnet die App bis unter Statusleiste und Tastatur:
+        // Abstände selbst setzen, der blaue Rand füllt den Platz hinter der Statusleiste.
+        FrameLayout root = new FrameLayout(this);
+        root.setBackgroundColor(Color.parseColor("#1f5f8b"));
+        root.addView(web);
+        setContentView(root);
+        if (Build.VERSION.SDK_INT >= 30) {
+            root.setOnApplyWindowInsetsListener((v, in) -> {
+                Insets bars = in.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
+                Insets ime = in.getInsets(WindowInsets.Type.ime());
+                v.setPadding(bars.left, bars.top, bars.right, Math.max(bars.bottom, ime.bottom));
+                return WindowInsets.CONSUMED;
+            });
+        }
 
         WebSettings s = web.getSettings();
         s.setJavaScriptEnabled(true);
@@ -90,6 +109,11 @@ public class MainActivity extends Activity {
             }
         });
 
+        if (Build.VERSION.SDK_INT >= 33) {
+            getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
+                    OnBackInvokedDispatcher.PRIORITY_DEFAULT, this::goBack);
+        }
+
         if (state != null) web.restoreState(state);
         else web.loadUrl(START);
     }
@@ -102,8 +126,12 @@ public class MainActivity extends Activity {
 
     @Override
     @SuppressWarnings("deprecation")
-    public void onBackPressed() {
-        // Zurück-Taste = einen Schritt zurück; auf Schritt 1 wird die App geschlossen.
+    public void onBackPressed() {   // bis Android 12
+        goBack();
+    }
+
+    /** Zurück-Taste = einen Schritt zurück; auf Schritt 1 wird die App geschlossen. */
+    private void goBack() {
         web.evaluateJavascript("window.appBack ? window.appBack() : false", v -> {
             if (!"true".equals(v)) finish();
         });

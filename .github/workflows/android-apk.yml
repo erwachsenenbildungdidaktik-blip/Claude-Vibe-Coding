@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: '17' }
       - uses: gradle/actions/setup-gradle@v4
-        with: { gradle-version: '8.10.2' }
+        with: { gradle-version: '8.14.3' }
       - name: APK bauen (unsigniert)
         env: { VERSION_CODE: '${{ github.run_number }}' }
         run: gradle -p android --no-daemon assembleRelease
@@ -29,6 +29,8 @@ jobs:
         run: |
           mkdir out && cp android/app/build/outputs/apk/release/app-release-unsigned.apk out/
           echo "${{ github.run_number }} ${{ github.sha }}" > out/BUILD.txt
+          # Offizielles apksigner aus den Build-Tools mitgeben (zum Signieren ausserhalb von GitHub)
+          cp "$(ls -d $ANDROID_HOME/build-tools/*/ | sort -V | tail -1)lib/apksigner.jar" out/
           cd out && git init -q -b apk-build && git add . \
             && git -c user.name=ci -c user.email=ci@localhost commit -qm "APK ${{ github.run_number }}" \
             && git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" apk-build
