@@ -10,7 +10,12 @@
 <meta name="copyright" content="© 2026 Hugo Rohrbacher">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<!-- iPhone: als Home-Bildschirm-App ohne Safari-Leisten, Statusleiste über dem blauen Kopf -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Bewerbung">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
 :root{
   --bg:#f3f5f7; --card:#fff; --ink:#1b1f24; --muted:#5b6672; --line:#d5dbe1;
@@ -19,13 +24,13 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-header{background:var(--accent);color:var(--accent-ink);padding:12px 16px calc(12px + env(safe-area-inset-top)) ;position:sticky;top:0;z-index:5}
+header{background:var(--accent);color:var(--accent-ink);padding:calc(12px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 12px calc(16px + env(safe-area-inset-left));position:sticky;top:0;z-index:5}
 header h1{margin:0;font-size:20px}
-nav.steps{display:flex;gap:4px;overflow-x:auto;padding:8px 8px 0;background:var(--accent)}
+nav.steps{display:flex;gap:4px;overflow-x:auto;padding:8px calc(8px + env(safe-area-inset-right)) 0 calc(8px + env(safe-area-inset-left));background:var(--accent)}
 nav.steps button{flex:1 0 auto;min-width:64px;border:0;border-radius:10px 10px 0 0;padding:8px 6px;background:#ffffff26;color:#fff;font:600 14px/1.2 inherit;cursor:pointer}
 nav.steps button[aria-current="step"]{background:var(--bg);color:var(--accent)}
 nav.steps .n{display:block;font-size:18px}
-main{max-width:640px;margin:0 auto;padding:16px}
+main{max-width:640px;margin:0 auto;padding:16px calc(16px + env(safe-area-inset-right)) 16px calc(16px + env(safe-area-inset-left))}
 section{display:none}
 section.active{display:block}
 h2{font-size:22px;margin:4px 0 12px}
@@ -60,7 +65,7 @@ textarea{min-height:45vh;resize:vertical;line-height:1.5}
 #sigPreview{max-width:100%;max-height:140px;background:#fff;border:1px dashed var(--line);border-radius:8px;padding:6px}
 #pad{width:100%;height:220px;background:#fff;border:2px dashed var(--accent);border-radius:12px;touch-action:none;display:block}
 #pages canvas{width:100%;background:#fff;box-shadow:0 2px 10px #0002;border-radius:4px;margin-bottom:12px;display:block}
-footer{max-width:640px;margin:0 auto;padding:8px 16px 40px;color:var(--muted);font-size:14px}
+footer{max-width:640px;margin:0 auto;padding:8px calc(16px + env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));color:var(--muted);font-size:14px}
 </style>
 </head>
 <body>
@@ -73,6 +78,11 @@ footer{max-width:640px;margin:0 auto;padding:8px 16px 40px;color:var(--muted);fo
   <button data-step="4"><span class="n">5</span>PDF</button>
 </nav>
 <main>
+<div id="iosHint" class="note hidden">
+  📲 <b>Bitte als App speichern:</b> Unten auf <b>Teilen</b> <span aria-hidden="true">(□↑)</span> tippen → <b>„Zum Home-Bildschirm“</b>.
+  Sonst kann iOS Ihre gespeicherten Angaben nach einigen Tagen löschen.
+  <button class="btn" id="iosHintClose" type="button" style="min-height:36px;margin-top:6px">Später</button>
+</div>
 
 <section id="s0">
   <h2>1 · Meine Angaben</h2>
@@ -180,6 +190,7 @@ footer{max-width:640px;margin:0 auto;padding:8px 16px 40px;color:var(--muted);fo
     <button class="btn big" id="btnSave" type="button">💾 PDF speichern</button>
   </div>
   <p class="hint">„Senden“ öffnet WhatsApp, E-Mail usw. mit dem PDF als Anhang.</p>
+  <div id="shareNote" class="note hidden"></div>
   <h2 style="margin-top:20px">Vorschau</h2>
   <div id="pages"></div>
   <button class="btn big" id="btnNew" type="button">➕ Neuer Brief für andere Firma</button>
@@ -187,7 +198,7 @@ footer{max-width:640px;margin:0 auto;padding:8px 16px 40px;color:var(--muted);fo
 
 </main>
 <footer>
-  Alles bleibt auf diesem Handy, nichts wird ins Internet geschickt.
+  <span id="privacy">Alles bleibt auf diesem Handy, nichts wird ins Internet geschickt.</span>
   <button class="btn danger" id="btnWipe" type="button" style="margin-top:10px;width:100%">🗑️ Alle meine Daten löschen</button>
   <p style="text-align:center;margin-top:18px">© 2026 Hugo Rohrbacher · Alle Rechte vorbehalten</p>
 </footer>
@@ -331,6 +342,7 @@ function applyClean(raw) {
   if (r.betreff) $('betreff').value = S.betreff = r.betreff;
   save(); checkPlaceholders();
   const box = $('cleanNotes');
+  box.className = 'note ok';
   box.innerHTML = '<b>Aufgeräumt.</b>' + (r.notes.length ? '<ul>' + r.notes.map(n => '<li>' + esc(n) + '</li>').join('') + '</ul>' : ' Nichts zu ändern.') +
     ' <button class="btn" id="btnUndo" type="button" style="min-height:36px;margin-top:6px">↶ Rückgängig</button>';
   box.classList.remove('hidden');
@@ -343,6 +355,11 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;',
 
 // In der Android-App: natives Gegenstück (Zwischenablage, Teilen, Speichern)
 const APP = window.AndroidApp || null;
+const IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+if (!APP) $('privacy').textContent = 'Ihre Angaben bleiben auf diesem Handy. Beim Öffnen der Seite sieht der Anbieter der Website nur den Seitenaufruf, nicht Ihre Daten.';
+// iPhone im Safari-Tab (nicht vom Home-Bildschirm): Safari löscht Website-Daten nach einigen Tagen ohne Besuch
+if (!APP && navigator.standalone === false) $('iosHint').classList.remove('hidden');
+$('iosHintClose').onclick = () => $('iosHint').classList.add('hidden');
 $('btnClean').onclick = () => applyClean($('text').value);
 $('btnPaste').onclick = async () => {
   try {
@@ -351,7 +368,9 @@ $('btnPaste').onclick = async () => {
     applyClean(t);
   } catch (e) {
     $('text').focus();
-    alert('Einfügen ging nicht automatisch.\nLange auf das Textfeld drücken und „Einfügen“ wählen.');
+    const box = $('cleanNotes');
+    box.className = 'note';
+    box.innerHTML = `Automatisch einfügen geht hier nicht. Bitte <b>lange ins Textfeld tippen</b> → <b>${IOS ? '„Einsetzen“' : '„Einfügen“'}</b> wählen.`;
   }
 };
 $('text').addEventListener('paste', () => {
@@ -711,6 +730,9 @@ async function renderPreview() {
   if (!S.sig) warn.push('Keine Unterschrift (Schritt 4).');
   if (lossy.size) warn.push('Diese Zeichen kann das PDF nicht darstellen und hat sie ersetzt: ' + [...lossy].join(', '));
   if (pages.length > 1) warn.push(`Der Brief hat ${pages.length} Seiten. Ein Bewerbungsbrief sollte auf 1 Seite passen – Text kürzen.`);
+  // PDF schon jetzt erzeugen: iOS erlaubt Teilen nur direkt nach dem Antippen, ohne Wartezeit dazwischen
+  readyFile = new File([buildPdf(pages, sig)], fileName(), { type: 'application/pdf' });
+  $('shareNote').classList.add('hidden');
   $('checkNotes').innerHTML = warn.length
     ? '<div class="note"><b>Bitte prüfen:</b><ul>' + warn.map(w => '<li>' + esc(w) + '</li>').join('') + '</ul></div>'
     : '<div class="note ok">✓ Alles ausgefüllt.</div>';
@@ -723,6 +745,7 @@ function fileName() {
   const clean = s => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^\w-]+/g, '_').replace(/^_+|_+$/g, '');
   return ['Bewerbung', clean(S.meName), clean(S.fiName)].filter(Boolean).join('_') + '.pdf';
 }
+let readyFile = null;
 async function makeFile() {
   const sig = await sigInfo();
   return new File([buildPdf(layout(sig), sig)], fileName(), { type: 'application/pdf' });
@@ -733,17 +756,31 @@ function download(file) {
   const a = document.createElement('a'); a.href = URL.createObjectURL(file); a.download = file.name;
   document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
 }
+const canShareFile = f => !!(navigator.canShare && navigator.canShare({ files: [f] }));
+function shareNote(html) { const n = $('shareNote'); n.innerHTML = html; n.classList.remove('hidden'); }
+const DL_HINT = IOS ? 'App „Dateien“ → „Downloads“' : 'Ordner „Downloads“ (App „Dateien“)';
+// Ohne title/text: iOS schickt sonst bei WhatsApp zusätzlich eine Textnachricht mit
+async function shareFile(file) {
+  try { await navigator.share({ files: [file] }); return true; }
+  catch (e) { return e && e.name === 'AbortError' ? true : false; }   // Abbrechen ist kein Fehler
+}
 $('btnShare').onclick = async () => {
-  const file = await makeFile();
+  const file = readyFile || await makeFile();
   if (APP) { APP.sharePdf(await toB64(file), file.name); return; }
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    try { await navigator.share({ files: [file], title: file.name }); } catch (e) { /* abgebrochen */ }
-  } else {
-    download(file);
-    alert('Teilen geht in diesem Browser nicht. Das PDF wurde gespeichert (Ordner „Downloads“).');
-  }
+  if (canShareFile(file) && await shareFile(file)) return;
+  download(file);
+  shareNote(`Teilen ist in diesem Browser nicht möglich. Das PDF wurde stattdessen gespeichert: ${DL_HINT}. Von dort können Sie es per Mail oder WhatsApp senden.`);
 };
-$('btnSave').onclick = async () => download(await makeFile());
+$('btnSave').onclick = async () => {
+  const file = readyFile || await makeFile();
+  // iPhone: Speichern über das Teilen-Menü („In Dateien sichern“); ein Download-Link ist in der Home-Bildschirm-App unzuverlässig
+  if (!APP && IOS && canShareFile(file)) {
+    shareNote('Im folgenden Menü bitte <b>„In Dateien sichern“</b> wählen.');
+    if (await shareFile(file)) return;
+  }
+  download(file);
+  if (!APP) shareNote(`Das PDF wurde gespeichert: ${DL_HINT}.`);
+};
 $('btnNew').onclick = () => {
   if (!confirm('Neuen Brief beginnen?\nFirma, Betreff und Text werden geleert. Ihre Angaben und die Unterschrift bleiben.')) return;
   ['fiName', 'fiKontakt', 'fiStrasse', 'fiPlzOrt', 'betreff', 'text', 'ort'].forEach(k => { S[k] = ''; $(k).value = ''; });

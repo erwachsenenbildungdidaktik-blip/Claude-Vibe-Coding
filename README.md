@@ -75,6 +75,31 @@ Platzhalter wie `[Firma]` werden als Warnung angezeigt. `**fett**` bleibt fett.
 im Browser-Menü „Zum Startbildschirm hinzufügen“ → läuft danach offline wie eine App.
 Falls doch eine APK nötig ist: die https-Adresse bei pwabuilder.com eingeben.
 
+## Web-App für iPhone (und alle anderen Handys)
+
+Derselbe Ordner `bewerbung-handy/` läuft auch als Web-App. Er muss über **https** erreichbar sein.
+Veröffentlicht wird nur dieser Ordner, nicht der Rest des Repos.
+
+**Variante A: Netlify** (am einfachsten)
+1. Auf netlify.com ein kostenloses Konto anlegen.
+2. „Add new site“ → „Deploy manually“ wählen.
+3. Den Ordner `bewerbung-handy` ins Browserfenster ziehen.
+4. Die angezeigte Adresse (…netlify.app) auf dem iPhone in **Safari** öffnen.
+5. Teilen (□↑) → „Zum Home-Bildschirm“ → „Hinzufügen“.
+   (Alternativ Repo verbinden: `netlify.toml` setzt Ordner und Sicherheits-Header automatisch.)
+
+**Variante B: GitHub Pages**
+1. Den Branch mit der App nach `main` übernehmen (Pull Request).
+2. Im Repo: Settings → Pages → Source: **„GitHub Actions“**.
+3. Unter „Actions“ den Workflow „Web-App auf GitHub Pages“ starten (oder auf `main` pushen).
+4. Die Adresse `https://<konto>.github.io/<repo>/` auf dem iPhone in **Safari** öffnen.
+5. Teilen (□↑) → „Zum Home-Bildschirm“ → „Hinzufügen“.
+   Achtung: Pages für **private** Repos geht nur mit einem kostenpflichtigen GitHub-Plan.
+
+**Updates:** Bei jeder Änderung `CACHE` in `sw.js` hochzählen (aktuell `v2`), sonst behalten iPhones die alte Fassung.
+Die Daten der TN bleiben im Browser des Handys. Auf dem iPhone nur als Home-Bildschirm-App verlässlich:
+im normalen Safari-Tab kann iOS Website-Daten nach einigen Tagen ohne Besuch löschen.
+
 ## Android-APK (Installation per USB-Kabel)
 
 Ordner `android/`: schlanke Hülle um `bewerbung-handy/` (Offline, keine Internet-Berechtigung).
