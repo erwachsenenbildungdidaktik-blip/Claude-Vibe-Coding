@@ -1,4 +1,5 @@
 // Offline-Cache: App einmal mit Internet öffnen, danach läuft sie ohne.
+// Copyright (c) 2026 Hugo Rohrbacher. Alle Rechte vorbehalten.
 const CACHE = 'bewerbung-pdf-v1';
 const FILES = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'];
 self.addEventListener('install', e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting())));

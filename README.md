@@ -51,6 +51,8 @@ Kein direkter Dateizugriff: „Klienten“ → „Datei laden …“ (Upload) un
 
 # Bewerbung als PDF (Handy-App für TN)
 
+© 2026 Hugo Rohrbacher, alle Rechte vorbehalten (siehe `LICENSE`).
+
 Ordner `bewerbung-handy/`. Web-App fürs Handy: ChatGPT-Text einfügen → Brief mit Adressen, Datum, Betreff
 und Unterschrift → PDF senden (WhatsApp, Mail …) oder speichern. Keine externe Bibliothek, kein Server:
 das PDF entsteht direkt auf dem Handy, Daten bleiben im Browser des Handys („Alle meine Daten löschen“ unten).

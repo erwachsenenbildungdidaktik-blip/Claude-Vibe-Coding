@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Hugo Rohrbacher. Alle Rechte vorbehalten.
 package ch.bewerbung.pdf;
 
 import android.app.Activity;
