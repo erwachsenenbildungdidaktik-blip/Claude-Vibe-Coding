@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wegweiser Vibecoding</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: eine Wanderroute, jede Etappe ein gelber Wegweiser mit Gehzeit, links eine durchgehende Wegmarkierung. */
+:root {
+  --bg: #f6f7f4;
+  --paper: #ffffff;
+  --ink: #1b1e1c;
+  --muted: #5b625d;
+  --line: #d9ddd6;
+  --sign: #f2c300;        /* Wanderweg-Gelb */
+  --sign-ink: #1b1e1c;
+  --red: #c8102e;         /* Bergweg */
+  --blue: #1f5fae;        /* Alpinweg */
+  --code-bg: #eef0eb;
+  --link: #1f5fae;
+  --ok: #2f7d4a;
+  --f-display: "Archivo", "Arial Narrow", Arial, sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", Helvetica, Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141614; --paper: #1c1f1c; --ink: #e9ece6; --muted: #a2aaa3; --line: #323732;
+    --sign: #e8b900; --sign-ink: #141614; --red: #ef4b5f; --blue: #6ea4ec;
+    --code-bg: #232723; --link: #8db8f2; --ok: #6cc28a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141614; --paper: #1c1f1c; --ink: #e9ece6; --muted: #a2aaa3; --line: #323732;
+  --sign: #e8b900; --sign-ink: #141614; --red: #ef4b5f; --blue: #6ea4ec;
+  --code-bg: #232723; --link: #8db8f2; --ok: #6cc28a; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font: 16px/1.6 var(--f-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 860px; margin: 0 auto; padding-block: 40px 80px; }
+a { color: var(--link); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; line-height: 1.15; margin: 0; }
+p { margin: 0; }
+.prose { display: grid; gap: 12px; max-width: 68ch; }
+code { font-family: var(--f-mono); font-size: .9em; background: var(--code-bg); padding: 1px 5px; border-radius: 3px; }
+ul, ol { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; }
+
+/* Kopf */
+header { display: grid; gap: 20px; margin-bottom: 40px; }
+.board {
+  display: inline-flex; align-items: stretch; background: var(--sign); color: var(--sign-ink);
+  font-family: var(--f-display); font-weight: 800; font-stretch: 80%;
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 50%, calc(100% - 22px) 100%, 0 100%);
+  padding: 10px 44px 10px 18px; width: fit-content; max-width: 100%;
+  font-size: clamp(15px, 3.6vw, 19px); letter-spacing: .02em; text-transform: uppercase;
+}
+h1 { font-size: clamp(34px, 7vw, 58px); font-weight: 800; font-stretch: 85%; }
+.lead { font-size: 18px; color: var(--muted); max-width: 62ch; }
+
+/* Übersicht der Route */
+.route { display: grid; gap: 0; border: 1px solid var(--line); background: var(--paper); border-radius: 4px; overflow: hidden; }
+.route a { display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: center; padding: 10px 14px; text-decoration: none; color: var(--ink); border-top: 1px solid var(--line); }
+.route a:first-child { border-top: 0; }
+.route a:hover { background: var(--code-bg); }
+.route .t { font-family: var(--f-mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.route .n { font-weight: 600; min-width: 0; }
+
+/* Wegmarkierungen */
+.mark { display: inline-block; width: 44px; height: 18px; border-radius: 2px; border: 1px solid var(--line); }
+.mark.gelb { background: var(--sign); }
+.mark.berg { background: linear-gradient(to bottom, #fff 0 33%, var(--red) 33% 67%, #fff 67%); }
+.mark.alpin { background: linear-gradient(to bottom, #fff 0 33%, var(--blue) 33% 67%, #fff 67%); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 14px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 8px; }
+.legend .mark { width: 30px; height: 12px; }
+
+/* Etappen */
+.stage { position: relative; padding-left: 28px; margin-top: 56px; display: grid; gap: 18px; }
+.stage::before { content: ""; position: absolute; left: 6px; top: 6px; bottom: -56px; width: 4px; background: var(--line); border-radius: 2px; }
+.stage.gelb::before { background: var(--sign); }
+.stage.berg::before { background: repeating-linear-gradient(to bottom, var(--red) 0 24px, transparent 24px 30px); }
+.stage.alpin::before { background: repeating-linear-gradient(to bottom, var(--blue) 0 24px, transparent 24px 30px); }
+.stage.last::before { bottom: 0; }
+.signrow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.signrow .board { font-size: 15px; padding-block: 6px; }
+.signrow .time { font-family: var(--f-mono); font-size: 14px; color: var(--muted); }
+.stage h2 { font-size: clamp(26px, 5vw, 36px); font-weight: 800; font-stretch: 88%; }
+.stage h3 { font-size: 19px; font-weight: 700; margin-top: 6px; }
+
+.steps { counter-reset: s; list-style: none; padding: 0; display: grid; gap: 12px; }
+.steps > li { counter-increment: s; display: grid; grid-template-columns: 30px 1fr; gap: 10px; }
+.steps > li::before { content: counter(s); font-family: var(--f-display); font-weight: 800; width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; background: var(--ink); color: var(--bg); font-size: 14px; margin-top: 1px; }
+.steps > li > div { min-width: 0; }
+
+.note { border-left: 4px solid var(--sign); background: var(--paper); padding: 12px 16px; font-size: 15px; max-width: 68ch; }
+.note.warn { border-left-color: var(--red); }
+.note strong { font-weight: 600; }
+
+/* Prompt-Karten */
+.prompt { background: var(--paper); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.prompt-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 8px 8px 14px; border-bottom: 1px solid var(--line); background: var(--code-bg); }
+.prompt-head span { font-family: var(--f-display); font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: .05em; min-width: 0; }
+.prompt pre { margin: 0; padding: 14px; overflow-x: auto; font: 14px/1.55 var(--f-mono); white-space: pre-wrap; word-break: break-word; }
+.prompt pre .ph { background: color-mix(in srgb, var(--sign) 35%, transparent); border-radius: 2px; }
+button.copy {
+  font: 600 14px var(--f-body); background: var(--ink); color: var(--bg); border: 0; border-radius: 4px;
+  padding: 7px 14px; cursor: pointer; white-space: nowrap;
+}
+button.copy:hover { opacity: .85; }
+button.copy.done { background: var(--ok); }
+
+/* Checkliste */
+.check { list-style: none; padding: 0; display: grid; gap: 8px; }
+.check label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.check input { width: 20px; height: 20px; margin-top: 3px; accent-color: var(--ok); flex: none; }
+.check input:checked + span { color: var(--muted); text-decoration: line-through; }
+
+/* Tabellen */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 4px; background: var(--paper); }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { text-align: left; padding: 9px 12px; border-top: 1px solid var(--line); vertical-align: top; }
+thead th { border-top: 0; font-family: var(--f-display); font-weight: 700; background: var(--code-bg); }
+td:first-child { font-weight: 600; white-space: nowrap; }
+
+.links { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+.links a { display: grid; gap: 2px; padding: 12px 14px; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; text-decoration: none; color: var(--ink); }
+.links a:hover { border-color: var(--ink); }
+.links a b { color: var(--link); font-weight: 600; }
+.links a small { color: var(--muted); font-size: 14px; }
+
+footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; display: grid; gap: 6px; }
+
+@media (max-width: 520px) {
+  .route a { grid-template-columns: 34px 1fr; }
+  .route .t { grid-column: 2; }
+  .route .mark { width: 30px; }
+  .stage { padding-left: 22px; }
+}
+@media (prefers-reduced-motion: no-preference) { button.copy { transition: background .2s; } }
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="board">Vibecoding · Einstiegsroute</div>
+  <h1>Dein Weg zum ersten eigenen Werkzeug mit Claude</h1>
+  <p class="lead">Beim Vibecoding beschreibst du in normaler Sprache, was du willst. Claude schreibt den Code. Du testest, gibst Rückmeldung und entscheidest. Programmieren musst du nicht können. Deine Aufgabe ist, klar zu sagen, was du brauchst, und genau hinzuschauen, ob es stimmt.</p>
+  <div class="legend" aria-label="Legende der Schwierigkeitsstufen">
+    <span><i class="mark gelb"></i> Wanderweg: ohne Installation, im Browser</span>
+    <span><i class="mark berg"></i> Bergweg: mit GitHub und Claude Code</span>
+    <span><i class="mark alpin"></i> Alpinweg: auf dem eigenen Rechner</span>
+  </div>
+  <nav class="route" aria-label="Etappen">
+    <a href="#ausruestung"><i class="mark gelb"></i><span class="n">0 · Ausrüstung: Konten anlegen</span><span class="t">15 Min</span></a>
+    <a href="#chat"><i class="mark gelb"></i><span class="n">1 · Erste Schritte im Chat (Artifacts)</span><span class="t">30 Min</span></a>
+    <a href="#github"><i class="mark berg"></i><span class="n">2 · Basislager GitHub</span><span class="t">30 Min</span></a>
+    <a href="#claude-code"><i class="mark berg"></i><span class="n">3 · Claude Code im Web</span><span class="t">45 Min</span></a>
+    <a href="#pages"><i class="mark berg"></i><span class="n">4 · Online stellen mit GitHub Pages</span><span class="t">20 Min</span></a>
+    <a href="#lokal"><i class="mark alpin"></i><span class="n">5 · Eigener Rechner: Cowork &amp; Claude Code</span><span class="t">60 Min</span></a>
+    <a href="#regeln"><i class="mark gelb"></i><span class="n">Wegregeln, Hilfe bei Problemen, Glossar</span><span class="t">immer</span></a>
+  </nav>
+</header>
+
+<!-- 0 -->
+<section class="stage gelb" id="ausruestung">
+  <div class="signrow"><div class="board">Etappe 0</div><span class="time">ca. 15 Min</span></div>
+  <h2>Ausrüstung: Konten anlegen</h2>
+  <div class="prose">
+    <p>Du brauchst einen aktuellen Browser (Chrome, Edge, Firefox oder Safari) und zwei Konten. Nimm für beide dieselbe E-Mail-Adresse, dann behältst du den Überblick.</p>
+  </div>
+  <ul class="check" data-group="ausruestung">
+    <li><label><input type="checkbox" id="c-claude"><span><b>Claude-Konto</b> auf <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a>. Für Etappe 1 reicht das Gratis-Konto. Für Claude Code (Etappe 3) und Cowork (Etappe 5) brauchst du ein bezahltes Abo (Pro oder höher). Aktuelle Preise: <a href="https://claude.com/pricing" target="_blank" rel="noopener">claude.com/pricing</a>.</span></label></li>
+    <li><label><input type="checkbox" id="c-github"><span><b>GitHub-Konto</b> auf <a href="https://github.com/signup" target="_blank" rel="noopener">github.com/signup</a>. Gratis. Wähle einen Benutzernamen, den du auch beruflich zeigen würdest, denn er erscheint in deinen Projekt-Adressen.</span></label></li>
+    <li><label><input type="checkbox" id="c-2fa"><span><b>Zwei-Faktor-Anmeldung</b> bei GitHub einrichten (GitHub verlangt das ohnehin). Eine Authenticator-App auf dem Handy genügt.</span></label></li>
+    <li><label><input type="checkbox" id="c-idee"><span><b>Eine kleine Idee</b> notieren, z. B. ein Bewerbungs-Tracker, ein Lernkarten-Quiz, ein Wochenplaner, ein Budgetrechner. Klein ist gut, denn klein wird fertig.</span></label></li>
+  </ul>
+</section>
+
+<!-- 1 -->
+<section class="stage gelb" id="chat">
+  <div class="signrow"><div class="board">Etappe 1</div><span class="time">ca. 30 Min</span></div>
+  <h2>Erste Schritte im Chat</h2>
+  <div class="prose">
+    <p>Auf claude.ai kann Claude kleine Programme direkt im Chat bauen. Die heissen <b>Artifacts</b> und erscheinen rechts neben dem Chat. Du kannst sie sofort ausprobieren, ohne etwas zu installieren. Ideal, um das Prinzip zu lernen: beschreiben, testen, verbessern.</p>
+  </div>
+  <ol class="steps">
+    <li><div>Öffne <a href="https://claude.ai/new" target="_blank" rel="noopener">einen neuen Chat auf claude.ai</a>.</div></li>
+    <li><div>Kopiere den Einstiegsprompt unten, ersetze den gelb markierten Teil durch deine Idee und schick ihn ab.</div></li>
+    <li><div>Beantworte Claudes Fragen. Dann baut Claude eine erste Version. Probier sie aus.</div></li>
+    <li><div>Gib Rückmeldung, eine Sache pro Nachricht: «Der Knopf soll grün sein», «Ich will auch ein Datum eintragen können».</div></li>
+  </ol>
+
+  <div class="prompt">
+    <div class="prompt-head"><span>Einstiegsprompt</span><button class="copy" type="button">Kopieren</button></div>
+<pre>Hallo Claude. Ich bin Einsteiger:in im Vibecoding und kann nicht programmieren. Ich möchte mit dir ein kleines, nützliches Werkzeug bauen, das als einzelne HTML-Datei im Browser läuft.
+
+So arbeiten wir zusammen:
+1. Stell mir zuerst höchstens 5 Fragen zu meiner Idee, bevor du etwas baust.
+2. Schlag mir dann eine ganz einfache erste Version vor (nur das Nötigste) und warte auf mein OK.
+3. Baue sie als Artifact, damit ich sie sofort ausprobieren kann.
+4. Erkläre mir in 3–4 einfachen Sätzen, was du gemacht hast, ohne Fachchinesisch.
+5. Sag mir nach jeder Version, was ich konkret testen soll.
+6. Wenn eine Idee von mir schlecht oder zu gross ist, sag es mir ehrlich und schlag etwas Einfacheres vor.
+
+Meine Idee: <span class="ph">[hier in 1–3 Sätzen beschreiben, z. B. «Ein Bewerbungs-Tracker, in dem ich Firma, Datum und Status meiner Bewerbungen eintrage und sehe, wo ich nachfassen muss.»]</span></pre>
+  </div>
+
+  <div class="note"><strong>Merke:</strong> Gute Prompts sagen <em>was</em> (das Ziel), <em>für wen</em> (wer benutzt es) und <em>woran du merkst, dass es fertig ist</em>. Wie es technisch gebaut wird, darfst du Claude überlassen.</div>
+</section>
+
+<!-- 2 -->
+<section class="stage berg" id="github">
+  <div class="signrow"><div class="board">Etappe 2</div><span class="time">ca. 30 Min</span></div>
+  <h2>Basislager GitHub</h2>
+  <div class="prose">
+    <p>Artifacts sind toll zum Ausprobieren. Für ein Projekt, an dem du über Tage weiterarbeitest, brauchst du einen festen Ort für deinen Code mit Versionsgeschichte. Das ist <b>GitHub</b>. Stell es dir als Ordner in der Cloud vor, der sich jede Änderung merkt. Geht etwas kaputt, kannst du zu einem früheren Stand zurück.</p>
+  </div>
+
+  <h3>Die fünf Wörter, die du kennen musst</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Begriff</th><th>Bedeutung im Alltag</th></tr></thead>
+      <tbody>
+        <tr><td>Repository (Repo)</td><td>Dein Projektordner auf GitHub, inklusive der ganzen Änderungsgeschichte.</td></tr>
+        <tr><td>Commit</td><td>Ein gespeicherter Zwischenstand mit kurzer Beschreibung, was geändert wurde. Wie ein Speicherpunkt im Spiel.</td></tr>
+        <tr><td>Branch</td><td>Eine Arbeitskopie neben der Hauptversion (<code>main</code>). Dort kann Claude ausprobieren, ohne das Funktionierende zu gefährden.</td></tr>
+        <tr><td>Pull Request (PR)</td><td>Ein Antrag: «Bitte übernimm die Änderungen aus dem Branch in die Hauptversion.» Hier schaust du dir an, was sich geändert hat.</td></tr>
+        <tr><td>Merge</td><td>Das Übernehmen. Erst nach dem Merge sind die Änderungen in <code>main</code>.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Dein erstes Repository</h3>
+  <ol class="steps">
+    <li><div>Bei GitHub oben rechts auf <b>+</b> → <b>New repository</b> klicken (oder direkt <a href="https://github.com/new" target="_blank" rel="noopener">github.com/new</a>).</div></li>
+    <li><div>Namen geben, kurz und ohne Leerzeichen, z. B. <code>bewerbungs-tracker</code>.</div></li>
+    <li><div><b>Private</b> wählen. Öffentlich machen kannst du es später immer noch.</div></li>
+    <li><div>Häkchen bei <b>Add a README file</b> setzen. Dann ist das Repo nicht leer und Claude kann direkt loslegen.</div></li>
+    <li><div><b>Create repository</b>. Fertig, das ist dein Basislager.</div></li>
+  </ol>
+  <div class="note">Zum Vertiefen (auf Deutsch, 10 Minuten): <a href="https://docs.github.com/de/get-started/start-your-journey/hello-world" target="_blank" rel="noopener">GitHub «Hello World»-Tutorial</a>.</div>
+</section>
+
+<!-- 3 -->
+<section class="stage berg" id="claude-code">
+  <div class="signrow"><div class="board">Etappe 3</div><span class="time">ca. 45 Min</span></div>
+  <h2>Claude Code im Web</h2>
+  <div class="prose">
+    <p><b>Claude Code</b> ist Claude als Programmier-Kollege, der selbst Dateien anlegt, Code schreibt, testet und auf GitHub speichert. In der Web-Version läuft das in einem abgeschotteten Computer in der Cloud. Auf deinem Rechner wird nichts verändert. Claude arbeitet immer auf einem eigenen Branch. In die Hauptversion kommt erst etwas, wenn du es übernimmst.</p>
+  </div>
+  <ol class="steps">
+    <li><div>Öffne <a href="https://claude.ai/code" target="_blank" rel="noopener">claude.ai/code</a> und melde dich mit deinem Claude-Konto an.</div></li>
+    <li><div>Verbinde dein GitHub-Konto, wenn du danach gefragt wirst. Erlaube der <a href="https://github.com/apps/claude" target="_blank" rel="noopener">Claude-GitHub-App</a> den Zugriff, am besten nur auf dein neues Repository («Only select repositories»).</div></li>
+    <li><div>Wähle dein Repository aus und gib deinen ersten Auftrag ein (Prompt unten).</div></li>
+    <li><div>Schau zu. Claude erklärt, was es tut. Am Ende liegen die Änderungen auf einem Branch, der mit <code>claude/</code> beginnt.</div></li>
+    <li><div>Lass Claude einen Pull Request erstellen oder klick selbst auf den entsprechenden Knopf. Auf GitHub siehst du unter <b>Files changed</b> genau, was neu ist. Passt alles: <b>Merge</b>.</div></li>
+  </ol>
+
+  <div class="prompt">
+    <div class="prompt-head"><span>Erster Auftrag im Repository</span><button class="copy" type="button">Kopieren</button></div>
+<pre>Dieses Repository ist mein erstes Vibecoding-Projekt. Ich bin Einsteiger:in und kann nicht programmieren.
+
+Ziel: <span class="ph">[deine Idee in 1–3 Sätzen]</span>
+
+Bitte so vorgehen:
+1. Stell mir zuerst deine Rückfragen, falls etwas unklar ist.
+2. Ergänze die README.md mit einer einfachen Beschreibung: Was ist das Projekt, wie benutzt man es.
+3. Baue eine erste, einfache Version als index.html: eine einzige Datei, ohne Installation, läuft per Doppelklick im Browser.
+4. Keine externen Dienste, keine Anmeldung, keine Personendaten.
+5. Kleine Commits mit verständlichen Beschreibungen auf Deutsch.
+6. Erkläre mir am Schluss in einfachen Worten, was du geändert hast und wie ich es teste.</pre>
+  </div>
+
+  <div class="prompt">
+    <div class="prompt-head"><span>Artifact aus Etappe 1 übernehmen</span><button class="copy" type="button">Kopieren</button></div>
+<pre>Ich habe im Chat auf claude.ai ein kleines Werkzeug gebaut. Den Code füge ich unten ein.
+Bitte speichere ihn als index.html in diesem Repository, prüfe, ob er ohne Fehler läuft, und beschreibe in der README.md kurz, was das Werkzeug kann.
+Ändere sonst noch nichts. Weitere Wünsche kommen danach einzeln.
+
+<span class="ph">[hier den Code aus dem Artifact einfügen: im Artifact-Fenster auf «Code» bzw. «Kopieren» klicken]</span></pre>
+  </div>
+
+  <div class="note">Die offizielle Anleitung zur Web-Version (Englisch): <a href="https://code.claude.com/docs/en/claude-code-on-the-web" target="_blank" rel="noopener">Claude Code on the web</a>.</div>
+</section>
+
+<!-- 4 -->
+<section class="stage berg" id="pages">
+  <div class="signrow"><div class="board">Etappe 4</div><span class="time">ca. 20 Min</span></div>
+  <h2>Online stellen mit GitHub Pages</h2>
+  <div class="prose">
+    <p>Dein Werkzeug soll eine eigene Web-Adresse bekommen, die du teilen kannst? GitHub Pages stellt eine <code>index.html</code> gratis ins Netz, unter <code>https://deinname.github.io/projektname</code>.</p>
+  </div>
+  <ol class="steps">
+    <li><div>Im Repository: <b>Settings</b> → <b>Pages</b>.</div></li>
+    <li><div>Bei «Source» <b>Deploy from a branch</b> wählen, Branch <code>main</code>, Ordner <code>/ (root)</code>, <b>Save</b>.</div></li>
+    <li><div>Nach ein bis zwei Minuten erscheint oben die Adresse deiner Seite.</div></li>
+  </ol>
+  <div class="note warn"><strong>Achtung:</strong> Mit dem Gratis-GitHub-Konto funktioniert Pages nur für <b>öffentliche</b> Repositories. Dann kann die ganze Welt deinen Code und die Seite sehen. Deshalb: nichts Persönliches, keine Passwörter, keine Daten anderer Menschen ins Repo. Anleitung: <a href="https://docs.github.com/de/pages/quickstart" target="_blank" rel="noopener">GitHub Pages Schnellstart</a>.</div>
+</section>
+
+<!-- 5 -->
+<section class="stage alpin" id="lokal">
+  <div class="signrow"><div class="board">Etappe 5</div><span class="time">ca. 60 Min</span></div>
+  <h2>Auf dem eigenen Rechner: Cowork &amp; Claude Code</h2>
+  <div class="prose">
+    <p>Bis hier lief alles im Browser. Auf dem eigenen Rechner kann Claude direkt mit deinen Dateien und Ordnern arbeiten. Dafür gibt es zwei Wege:</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Werkzeug</th><th>Wofür</th><th>Für wen</th></tr></thead>
+      <tbody>
+        <tr><td>Cowork<br><small>in der Claude-Desktop-App</small></td><td>Claude erledigt Aufgaben mit Dateien in einem Ordner, den du freigibst: sortieren, zusammenfassen, Tabellen und Dokumente erstellen, kleine Werkzeuge bauen.</td><td>Alle, ohne Kommandozeile</td></tr>
+        <tr><td>Claude Code lokal<br><small>Terminal, Desktop-App oder VS Code</small></td><td>Software-Projekte auf deinem Rechner, mit Git und GitHub verbunden. Wie Etappe 3, nur lokal.</td><td>Wer Etappe 3 gemacht hat und mehr will</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Weg A: Cowork in der Desktop-App</h3>
+  <ol class="steps">
+    <li><div>Claude-Desktop-App für Windows oder macOS herunterladen: <a href="https://claude.ai/download" target="_blank" rel="noopener">claude.ai/download</a>. Installieren und anmelden.</div></li>
+    <li><div>Lege einen eigenen Arbeitsordner an, z. B. <code>Dokumente/Claude-Werkstatt</code>. Kopiere nur hinein, womit Claude arbeiten soll.</div></li>
+    <li><div>In der App zu <b>Cowork</b> wechseln, den Ordner auswählen und die Aufgabe beschreiben (Prompt unten).</div></li>
+    <li><div>Claude zeigt dir seinen Plan und fragt vor wichtigen Schritten nach. Lies die Rückfragen, bevor du zustimmst.</div></li>
+  </ol>
+  <div class="prompt">
+    <div class="prompt-head"><span>Start in Cowork</span><button class="copy" type="button">Kopieren</button></div>
+<pre>Ich habe dir den Ordner <span class="ph">[Name]</span> freigegeben.
+1. Schau dir zuerst an, was darin liegt, und fasse es in ein paar Sätzen zusammen.
+2. Ändere, verschiebe oder lösche nichts, ohne mich vorher zu fragen.
+3. Lege neue Dateien in einem Unterordner «claude-ergebnisse» ab.
+
+Meine Aufgabe: <span class="ph">[z. B. «Erstelle aus meinen Bewerbungs-PDFs eine Übersichtstabelle mit Firma, Stelle, Datum und Status.»]</span></pre>
+  </div>
+
+  <h3>Weg B: Claude Code auf dem eigenen Rechner</h3>
+  <ol class="steps">
+    <li><div><b>Git installieren</b> (Windows: <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git for Windows</a>; macOS: meldet sich beim ersten Gebrauch von selbst). Empfohlen als Editor: <a href="https://code.visualstudio.com" target="_blank" rel="noopener">Visual Studio Code</a>.</div></li>
+    <li><div><b>Claude Code installieren.</b> Terminal öffnen (macOS: «Terminal», Windows: «PowerShell») und den passenden Befehl einfügen:
+      <div class="prompt" style="margin-top:10px">
+        <div class="prompt-head"><span>macOS / Linux</span><button class="copy" type="button">Kopieren</button></div>
+<pre>curl -fsSL https://claude.ai/install.sh | bash</pre>
+      </div>
+      <div class="prompt" style="margin-top:10px">
+        <div class="prompt-head"><span>Windows (PowerShell)</span><button class="copy" type="button">Kopieren</button></div>
+<pre>irm https://claude.ai/install.ps1 | iex</pre>
+      </div>
+      Klappt etwas nicht, steht die aktuelle Anleitung im <a href="https://code.claude.com/docs/en/quickstart" target="_blank" rel="noopener">offiziellen Quickstart</a>. Alternativ geht Claude Code auch ohne Terminal im Bereich <b>Code</b> der Desktop-App oder als Erweiterung in VS Code.</div></li>
+    <li><div><b>Projekt holen:</b> Auf GitHub im Repo auf <b>Code</b> → Adresse kopieren. Im Terminal:
+      <div class="prompt" style="margin-top:10px">
+        <div class="prompt-head"><span>Repo klonen und Claude starten</span><button class="copy" type="button">Kopieren</button></div>
+<pre>git clone <span class="ph">https://github.com/DEINNAME/DEINPROJEKT.git</span>
+cd <span class="ph">DEINPROJEKT</span>
+claude</pre>
+      </div>
+      Beim ersten Start meldest du dich mit deinem Claude-Konto an.</div></li>
+    <li><div><b>Projektregeln anlegen.</b> Eine Datei <code>CLAUDE.md</code> im Projektordner liest Claude bei jedem Start. Bitte Claude, sie mit diesem Inhalt anzulegen:
+      <div class="prompt" style="margin-top:10px">
+        <div class="prompt-head"><span>CLAUDE.md-Vorlage</span><button class="copy" type="button">Kopieren</button></div>
+<pre>Lege bitte eine Datei CLAUDE.md mit folgendem Inhalt an:
+
+# Projektregeln für Claude
+- Ich bin Einsteiger:in. Erkläre Änderungen in einfachen Worten.
+- Sprache: Deutsch, Schweizer Rechtschreibung (ss statt ß).
+- Kleine Schritte: eine Änderung nach der anderen, jede als eigener Commit.
+- Frag nach, bevor du Dateien löschst oder Grösseres umbaust.
+- Keine Passwörter, Schlüssel oder Personendaten in Dateien schreiben.
+- Sag mir nach jeder Änderung, wie ich sie teste.</pre>
+      </div></div></li>
+  </ol>
+  <div class="note"><strong>Tipp:</strong> Claude Code fragt lokal vor heiklen Aktionen um Erlaubnis, etwa bevor es Befehle ausführt oder Dateien ändert. Lies diese Rückfragen. «Ja» drücken, ohne zu lesen, ist der häufigste Anfängerfehler.</div>
+</section>
+
+<!-- Regeln -->
+<section class="stage gelb last" id="regeln">
+  <div class="signrow"><div class="board">Unterwegs</div><span class="time">auf jeder Etappe</span></div>
+  <h2>Wegregeln</h2>
+  <ul class="check" data-group="regeln">
+    <li><label><input type="checkbox" id="r1"><span><b>Klein anfangen.</b> Eine Funktion nach der anderen. Ein Riesen-Prompt mit 15 Wünschen geht fast immer schief.</span></label></li>
+    <li><label><input type="checkbox" id="r2"><span><b>Selbst testen.</b> Claude macht Fehler und klingt dabei überzeugt. Du bist die Qualitätskontrolle. Klick alles durch.</span></label></li>
+    <li><label><input type="checkbox" id="r3"><span><b>Keine Geheimnisse.</b> Keine Passwörter, AHV-Nummern, Gesundheitsdaten oder Daten anderer Personen in Prompts oder Repos.</span></label></li>
+    <li><label><input type="checkbox" id="r4"><span><b>Oft speichern.</b> Funktioniert etwas, sofort committen bzw. mergen. Dann gibt es immer einen sicheren Stand zum Zurückgehen.</span></label></li>
+    <li><label><input type="checkbox" id="r5"><span><b>Nachfragen erlaubt.</b> «Erklär mir das, als wäre ich 12» ist ein völlig legitimer Prompt.</span></label></li>
+    <li><label><input type="checkbox" id="r6"><span><b>Neu starten statt verheddern.</b> Wenn sich ein Chat im Kreis dreht: neuen Chat öffnen, kurz zusammenfassen, wo du stehst, weitermachen.</span></label></li>
+  </ul>
+
+  <h3>Wenns klemmt</h3>
+  <div class="prose"><p>Etwas funktioniert nicht? Beschreib es so, dass Claude die Ursache findet, statt zu raten. Ein Screenshot hilft oft mehr als tausend Worte. Du kannst ihn einfach in den Chat ziehen.</p></div>
+  <div class="prompt">
+    <div class="prompt-head"><span>Fehler melden</span><button class="copy" type="button">Kopieren</button></div>
+<pre>Etwas funktioniert nicht.
+Was ich gemacht habe: <span class="ph">[…]</span>
+Was ich erwartet habe: <span class="ph">[…]</span>
+Was stattdessen passiert ist: <span class="ph">[…]</span>
+Fehlermeldung (falls vorhanden): <span class="ph">[…]</span>
+
+Bitte finde zuerst die Ursache und erkläre sie mir in einfachen Worten, bevor du etwas änderst.</pre>
+  </div>
+  <div class="prompt">
+    <div class="prompt-head"><span>Neuer Chat, gleiches Projekt</span><button class="copy" type="button">Kopieren</button></div>
+<pre>Ich arbeite an einem Projekt weiter und brauche einen frischen Start.
+Das Projekt: <span class="ph">[1–2 Sätze]</span>
+Was schon funktioniert: <span class="ph">[…]</span>
+Woran ich gerade hänge: <span class="ph">[…]</span>
+Nächster kleiner Schritt, den ich will: <span class="ph">[…]</span>
+Frag mich, wenn dir Informationen fehlen.</pre>
+  </div>
+
+  <h3>Mini-Glossar</h3>
+  <div class="table-wrap">
+    <table>
+      <tbody>
+        <tr><td>Prompt</td><td>Deine Anweisung an Claude.</td></tr>
+        <tr><td>Artifact</td><td>Ein Programm oder Dokument, das Claude im Chat erstellt und das du direkt ausprobieren kannst.</td></tr>
+        <tr><td>HTML</td><td>Die Sprache, aus der Webseiten bestehen. Eine .html-Datei öffnet sich im Browser.</td></tr>
+        <tr><td>Terminal</td><td>Textfenster, in dem man dem Computer Befehle tippt. Nur für Etappe 5B nötig.</td></tr>
+        <tr><td>Klonen</td><td>Ein GitHub-Repo auf den eigenen Rechner kopieren, inklusive Verbindung zum Original.</td></tr>
+        <tr><td>CLAUDE.md</td><td>Notizzettel mit Regeln, den Claude Code in jedem Projekt zuerst liest.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Weiterführend</h3>
+  <div class="links">
+    <a href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener"><b>Claude Code Dokumentation</b><small>Offizielle Übersicht, Englisch</small></a>
+    <a href="https://www.anthropic.com/learn" target="_blank" rel="noopener"><b>Anthropic Academy</b><small>Gratis-Kurse zu Claude und Prompting</small></a>
+    <a href="https://docs.github.com/de/get-started" target="_blank" rel="noopener"><b>GitHub Einstieg</b><small>Offizielle Doku, Deutsch</small></a>
+    <a href="https://support.claude.com" target="_blank" rel="noopener"><b>Claude Hilfe-Center</b><small>Fragen zu Konto, Abo, Desktop-App und Cowork</small></a>
+  </div>
+</section>
+
+<footer>
+  <p>Stand: Oktober 2026. Menüs und Knöpfe ändern sich bei diesen Werkzeugen häufig. Wenn etwas anders aussieht als hier beschrieben, frag Claude: «Wo finde ich heute …?»</p>
+  <p>Deine Häkchen in den Checklisten merkt sich nur dein Browser.</p>
+</footer>
+
+</div>
+
+<script>
+document.querySelectorAll("button.copy").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    var pre = btn.closest(".prompt").querySelector("pre");
+    var text = pre.innerText.trim();
+    function ok() {
+      btn.textContent = "Kopiert ✓"; btn.classList.add("done");
+      setTimeout(function () { btn.textContent = "Kopieren"; btn.classList.remove("done"); }, 1800);
+    }
+    function fallback() {
+      var r = document.createRange(); r.selectNodeContents(pre);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      try { if (document.execCommand("copy")) { ok(); return; } } catch (e) {}
+      btn.textContent = "Markiert: Strg+C";
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok, fallback);
+    } else { fallback(); }
+  });
+});
+
+var KEY = "vibecoding-route-checks";
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) {}
+document.querySelectorAll(".check input").forEach(function (cb) {
+  if (saved[cb.id]) cb.checked = true;
+  cb.addEventListener("change", function () {
+    saved[cb.id] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+  });
+});
+</script>
+
+</html>
