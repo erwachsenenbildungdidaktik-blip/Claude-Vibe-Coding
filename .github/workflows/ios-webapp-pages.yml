@@ -1,32 +1,23 @@
-# iOS · GitHub Pages: veröffentlicht nur die iOS-Web-App (ios-webapp/).
-# Einmalig nötig: Settings → Pages → Source: „GitHub Actions“.
-name: iOS · Web-App auf GitHub Pages
+# iOS · Web-App für GitHub Pages: kopiert ios-webapp/ auf den Branch "ios-webapp-pages".
+# Einmalig nötig: Settings → Pages → Source „Deploy from a branch“ → ios-webapp-pages / (root).
+name: iOS · Web-App für GitHub Pages
 
 on:
   push:
-    branches: [main]
     paths: ['ios-webapp/**', '.github/workflows/ios-webapp-pages.yml']
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
+  contents: write
 
 jobs:
-  deploy:
+  publish:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with: { path: ios-webapp }
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Auf Branch ios-webapp-pages ablegen
+        run: |
+          mkdir out && cp -r ios-webapp/. out/ && touch out/.nojekyll
+          cd out && git init -q -b ios-webapp-pages && git add . \
+            && git -c user.name=ci -c user.email=ci@localhost commit -qm "Web-App ${{ github.sha }}" \
+            && git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" ios-webapp-pages

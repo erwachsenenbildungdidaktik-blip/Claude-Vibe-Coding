@@ -60,7 +60,7 @@ Kein direkter Dateizugriff: „Klienten“ → „Datei laden …“ (Upload) un
 | `downloads/Bewerbung-PDF-Android.apk` | **Android** | **Download 1:** installierbare, signierte APK |
 | `downloads/Bewerbung-PDF-iPhone-Webapp.zip` | **iOS** | **Download 2:** Web-App zum Hochladen (z. B. Netlify), dann auf dem iPhone „Zum Home-Bildschirm“ |
 | `.github/workflows/android-apk.yml` | **Android** | Baut die APK (unsigniert, Branch `android-apk-build`) |
-| `.github/workflows/ios-webapp-pages.yml` | **iOS** | Veröffentlicht die Web-App auf GitHub Pages |
+| `.github/workflows/ios-webapp-pages.yml` | **iOS** | Legt die Web-App auf den Branch `ios-webapp-pages` (Quelle für GitHub Pages) |
 | `netlify.toml` | **iOS** | Veröffentlicht die Web-App auf Netlify |
 
 Web-App fürs Handy: ChatGPT-Text einfügen → Brief mit Adressen, Datum, Betreff
@@ -99,12 +99,11 @@ Veröffentlicht wird nur dieser Ordner, nicht der Rest des Repos.
    (Alternativ Repo verbinden: `netlify.toml` setzt Ordner und Sicherheits-Header automatisch.)
 
 **Variante B: GitHub Pages**
-1. Den Branch mit der App nach `main` übernehmen (Pull Request).
-2. Im Repo: Settings → Pages → Source: **„GitHub Actions“**.
-3. Unter „Actions“ den Workflow „iOS · Web-App auf GitHub Pages“ starten (oder auf `main` pushen).
-4. Die Adresse `https://<konto>.github.io/<repo>/` auf dem iPhone in **Safari** öffnen.
+1. Repo muss **öffentlich** sein (Pages für private Repos nur mit kostenpflichtigem Plan).
+2. Der Workflow „iOS · Web-App für GitHub Pages“ legt die App auf den Branch `ios-webapp-pages`.
+3. Im Repo: Settings → Pages → Source **„Deploy from a branch“** → Branch `ios-webapp-pages`, Ordner `/ (root)` → Save.
+4. 1–2 Minuten warten, dann `https://<konto>.github.io/<repo>/` auf dem iPhone in **Safari** öffnen.
 5. Teilen (□↑) → „Zum Home-Bildschirm“ → „Hinzufügen“.
-   Achtung: Pages für **private** Repos geht nur mit einem kostenpflichtigen GitHub-Plan.
 
 **Updates:** Bei jeder Änderung `CACHE` in `sw.js` hochzählen (aktuell `v2`), sonst behalten iPhones die alte Fassung.
 Das ZIP in `downloads/` wird nicht automatisch gebaut: nach Änderungen an `ios-webapp/` neu erzeugen
